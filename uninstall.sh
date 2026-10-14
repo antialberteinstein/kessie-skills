@@ -6,7 +6,13 @@
 
 set -euo pipefail
 
-SKILLS=("issue-resolve" "pr-review")
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILLS=()
+for d in "${SCRIPT_DIR}"/*/; do
+  if [[ -f "${d}SKILL.md" ]]; then
+    SKILLS+=("$(basename "$d")")
+  fi
+done
 
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'

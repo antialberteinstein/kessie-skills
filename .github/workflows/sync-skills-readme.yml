@@ -1,0 +1,62 @@
+name: Sync Skills to README
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/SKILL.md'
+      - 'scripts/update-readme.py'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/SKILL.md'
+      - 'scripts/update-readme.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-readme:
+    name: Sync Skills Table
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check / Update README.md
+        id: update
+        run: |
+          python3 scripts/update-readme.py
+
+      - name: Verify on Pull Request
+        if: github.event_name == 'pull_request'
+        run: |
+          if ! git diff --quiet README.md; then
+            echo "::error::README.md is out of date with current skills. Run 'python3 scripts/update-readme.py' locally and commit the change."
+            git diff README.md
+            exit 1
+          fi
+
+      - name: Commit and Push (on main)
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          if ! git diff --quiet README.md; then
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git add README.md
+            git commit -m "docs: auto-update Skills Included table in README [skip ci]"
+            git push
+            echo "Successfully updated and pushed README.md changes."
+          else
+            echo "No changes detected in README.md."
+          fi

@@ -1,23 +1,42 @@
 # Kessie Skills
 
-A lightweight, high-signal collection of agent skills for **Claude Code**, **Codex**, and **Gemini CLI / Antigravity**.
+<div align="center">
 
-Designed to automate the core GitHub software delivery lifecycle: resolving issues end-to-end and performing thorough, structured pull request reviews.
+[![Sync Skills README](https://github.com/antialberteinstein/kessie-skills/actions/workflows/sync-skills-readme.yml/badge.svg)](https://github.com/antialberteinstein/kessie-skills/actions/workflows/sync-skills-readme.yml)
+<!-- SKILLS_COUNT_START -->![Skills Count](https://img.shields.io/badge/skills-2-blue.svg?style=flat-square)<!-- SKILLS_COUNT_END -->
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](./LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](./CONTRIBUTING.md)
+
+**A lightweight, high-signal collection of agent skills for Claude Code, Codex, and Gemini CLI / Antigravity.**
+
+[Skills Included](#skills-included) • [Prerequisites](#prerequisites) • [Installation](#installation--deployment) • [Usage](#usage) • [Structure](#repository-structure) • [Automation](#automated-skills-sync) • [Contributing](#contributing)
+
+</div>
+
+---
+
+## Overview
+
+**Kessie Skills** automates key stages of the software delivery lifecycle using specialized LLM workflows. It enables your AI pair programmer to investigate and solve GitHub issues with full test validation and to conduct structured, multi-dimensional pull request reviews.
 
 ---
 
 ## Skills Included
 
+<!-- SKILLS_TABLE_START -->
 | Skill | Trigger / Slash Command | Description |
 | :--- | :--- | :--- |
-| **[`issue-resolve`](file:///Volumes/Data/TheNewMeArrange/Kessie/kessie-skills/issue-resolve/SKILL.md)** | `/issue-resolve <ISSUE>`, `/resolve-issue` | Analyzes a GitHub issue, branches, writes minimal fix with tests, creates a PR, and iterates on review feedback. |
-| **[`pr-review`](file:///Volumes/Data/TheNewMeArrange/Kessie/kessie-skills/pr-review/SKILL.md)** | `/pr-review <PR>`, `/pull-request-review` | Inspects pull request diffs or checks out code locally to run tests, delivering structured, actionable review feedback. |
+| **[`issue-resolve`](./issue-resolve/SKILL.md)** | `/issue-resolve`, `/resolve-issue` | Resolve a GitHub issue end-to-end: fetch issue details, reproduce, implement fix, test, submit PR, and iterate on review feedback. |
+| **[`pr-review`](./pr-review/SKILL.md)** | `/pr-review`, `/pull-request-review` | Review or test a GitHub pull request. Inspects diffs, analyzes code quality, security, and test coverage, and provides actionable feedback. |
+<!-- SKILLS_TABLE_END -->
+
+> *Note: This table and badge are automatically updated by GitHub Actions whenever a new skill directory with a `SKILL.md` is added or modified.*
 
 ---
 
 ## Prerequisites
 
-Before using these skills, ensure you have the following installed and authenticated:
+Ensure you have the following installed and authenticated:
 
 - **[git](https://git-scm.com/)**: Version 2.20 or newer.
 - **[GitHub CLI (`gh`)](https://cli.github.com/)**: Logged in to your GitHub account:
@@ -29,7 +48,7 @@ Before using these skills, ensure you have the following installed and authentic
 
 ## Installation & Deployment
 
-The repository includes a unified [install.sh](file:///Volumes/Data/TheNewMeArrange/Kessie/kessie-skills/install.sh) script to deploy skills to your AI agent harnesses.
+Deploy skills to your local harnesses with [install.sh](./install.sh):
 
 ### 1. Install to All Detected Harnesses (Default)
 Copies skills to Claude Code (`~/.claude/skills`), Codex (`~/.codex/skills`), and Gemini (`~/.gemini/config/skills` & `~/.gemini/skills`):
@@ -39,14 +58,14 @@ Copies skills to Claude Code (`~/.claude/skills`), Codex (`~/.codex/skills`), an
 ```
 
 ### 2. Symlink Mode (Recommended for Development)
-Links directly to this repository so any edits made here take effect immediately across all harnesses without re-copying:
+Creates symlinks directly to this repository so edits take effect immediately across all harnesses without re-running install:
 
 ```bash
 ./install.sh --symlink all
 ```
 
 ### 3. Selective Installation
-Target specific harnesses as needed:
+Target specific harnesses:
 
 ```bash
 # Install only to Claude Code
@@ -55,12 +74,12 @@ Target specific harnesses as needed:
 # Install only to Gemini CLI / Antigravity
 ./install.sh gemini
 
-# Install only to Codex
+# Install only to Codex CLI
 ./install.sh codex
 ```
 
 ### 4. Local Project Installation
-Deploy skills directly into an individual repository rather than user-global paths:
+Deploy skills into a single repository instead of global user configs:
 
 ```bash
 ./install.sh --local /path/to/your/project
@@ -70,7 +89,7 @@ Deploy skills directly into an individual repository rather than user-global pat
 
 ## Uninstallation
 
-To remove the skills from all harnesses, run [uninstall.sh](file:///Volumes/Data/TheNewMeArrange/Kessie/kessie-skills/uninstall.sh):
+To cleanly remove installed skills from all harnesses, run [uninstall.sh](./uninstall.sh):
 
 ```bash
 ./uninstall.sh
@@ -82,7 +101,7 @@ To remove the skills from all harnesses, run [uninstall.sh](file:///Volumes/Data
 
 ### Using `issue-resolve`
 
-Invoke with the issue number or URL:
+Invoke in your chat or slash command line:
 
 ```
 /issue-resolve 142
@@ -115,30 +134,50 @@ Invoke with the pull request number or URL:
 
 ---
 
+## Automated Skills Sync
+
+This repository includes a GitHub Action workflow ([`.github/workflows/sync-skills-readme.yml`](./.github/workflows/sync-skills-readme.yml)) that runs on every push or PR touching `*/SKILL.md`:
+1. Scans for any new or updated skill folders containing `SKILL.md`.
+2. Parses frontmatter (`name`, `description`) and triggers (`/slash-command`).
+3. Automatically regenerates the [Skills Included](#skills-included) table and updates the skill count badge in `README.md`.
+4. Commits and pushes the documentation update back to `main`.
+
+You can also run the generator locally at any time:
+```bash
+python3 scripts/update-readme.py
+```
+
+---
+
 ## Repository Structure
 
 ```
 kessie-skills/
-├── .gitignore             # Standard ignore rules
-├── CONTRIBUTING.md        # Skill authoring standards
-├── LICENSE                # MIT License
-├── README.md              # Project documentation
-├── install.sh             # Multi-harness deployment script
-├── uninstall.sh           # Clean removal script
+├── .github/
+│   └── workflows/
+│       └── sync-skills-readme.yml  # GitHub Action for auto-updating README table
+├── scripts/
+│   └── update-readme.py            # Dynamic skills scanner & README generator
+├── .gitignore                      # Standard ignore rules
+├── CONTRIBUTING.md                 # Skill authoring guidelines
+├── LICENSE                         # MIT License
+├── README.md                       # Project documentation
+├── install.sh                      # Multi-harness deployment script
+├── uninstall.sh                    # Clean uninstallation script
 ├── issue-resolve/
-│   └── SKILL.md           # End-to-end issue resolution workflow
+│   └── SKILL.md                    # Issue resolution workflow
 └── pr-review/
-    └── SKILL.md           # Structured PR review and testing workflow
+    └── SKILL.md                    # PR review and testing workflow
 ```
 
 ---
 
 ## Contributing
 
-Please review [CONTRIBUTING.md](file:///Volumes/Data/TheNewMeArrange/Kessie/kessie-skills/CONTRIBUTING.md) for skill format rules, YAML frontmatter standards, and validation checklists.
+Review [CONTRIBUTING.md](./CONTRIBUTING.md) for skill format requirements, YAML frontmatter standards, and validation checklists.
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](file:///Volumes/Data/TheNewMeArrange/Kessie/kessie-skills/LICENSE).
+This project is licensed under the [MIT License](./LICENSE).

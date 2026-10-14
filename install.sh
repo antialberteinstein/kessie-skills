@@ -7,7 +7,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILLS=("issue-resolve" "pr-review")
+# Auto-discover all skills containing SKILL.md
+SKILLS=()
+for d in "${SCRIPT_DIR}"/*/; do
+  if [[ -f "${d}SKILL.md" ]]; then
+    SKILLS+=("$(basename "$d")")
+  fi
+done
 
 # Colors
 GREEN='\033[0;32m'
