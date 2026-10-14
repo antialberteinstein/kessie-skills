@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Backups and temporary files
+*.tmp
+*.bak
+*~
+*.swp
+*.swo
+
+# Local logs
+*.log
+
+# Local environment
+.env
+.env.local
