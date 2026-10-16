@@ -1,6 +1,6 @@
 ---
 name: issue-resolve
-description: Resolve a GitHub issue end-to-end: fetch issue details, reproduce, implement fix, test, submit PR, and iterate on review feedback.
+description: "Resolve a GitHub issue end-to-end: fetch issue details, reproduce, implement fix, test, submit PR, and iterate on review feedback."
 author: Nhat Nguyen
 requires:
   - GitHub CLI (gh)
