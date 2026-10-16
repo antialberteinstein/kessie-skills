@@ -1,10 +1,9 @@
 ---
 name: pr-review
-description: Review or test a GitHub pull request. Inspects diffs, analyzes code quality, security, and test coverage, and provides actionable feedback.
-author: Nhat Nguyen
-requires:
-  - GitHub CLI (gh)
-  - git
+description: "Review or test a GitHub pull request. Inspects diffs, analyzes code quality, security, and test coverage, and provides actionable feedback."
+metadata:
+  author: "Nhat Nguyen"
+  requires: "GitHub CLI (gh), git"
 ---
 
 # Pull Request Review Skill

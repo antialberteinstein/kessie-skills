@@ -37,6 +37,7 @@ echo -e "${BLUE}=== Kessie Skills Uninstaller ===${NC}"
 DIRS=(
   "${HOME}/.claude/skills"
   "${HOME}/.codex/skills"
+  "${HOME}/.agents/skills"
   "${HOME}/.gemini/config/skills"
   "${HOME}/.gemini/skills"
 )

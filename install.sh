@@ -33,7 +33,7 @@ Usage: $(basename "$0") [OPTIONS] [TARGETS...]
 
 Targets:
   claude       Install to Claude Code (~/.claude/skills)
-  codex        Install to Codex CLI (~/.codex/skills)
+  codex        Install to Codex CLI (~/.agents/skills & ~/.codex/skills)
   gemini       Install to Gemini CLI / Antigravity (~/.gemini/config/skills & ~/.gemini/skills)
   all          Install to all detected harnesses (default if no targets specified)
 
@@ -168,11 +168,13 @@ if has_target "claude"; then
   done
 fi
 
-# 2. Codex CLI (~/.codex/skills)
+# 2. Codex CLI (~/.agents/skills, plus legacy ~/.codex/skills)
 if has_target "codex"; then
   CODEX_DIR="${HOME}/.codex/skills"
-  echo -e "\nTarget: Codex CLI (${CODEX_DIR})"
+  AGENTS_DIR="${HOME}/.agents/skills"
+  echo -e "\nTarget: Codex CLI (${AGENTS_DIR} & ${CODEX_DIR})"
   for skill in "${SKILLS[@]}"; do
+    install_skill_to_dir "$skill" "$AGENTS_DIR"
     install_skill_to_dir "$skill" "$CODEX_DIR"
   done
 fi
