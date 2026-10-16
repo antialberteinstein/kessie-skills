@@ -1,0 +1,6 @@
+interface:
+  display_name: "Issue Resolve"
+  short_description: "Resolve a GitHub issue end-to-end and open a PR"
+  default_prompt: "Use $issue-resolve to fix the GitHub issue I link and open a pull request."
+policy:
+  allow_implicit_invocation: true
