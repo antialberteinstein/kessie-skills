@@ -43,5 +43,7 @@ Tham số (phần sau tên chế độ):
 - [ ] AC có bằng chứng, hoặc ghi rõ phần chưa xác minh.
 - [ ] Cổng kiểm tra đạt; diff, log, ảnh không chứa secret hay dữ liệu cá nhân.
 - [ ] Cập nhật CHANGELOG; cập nhật CLAUDE.md nếu có lệnh mới hoặc cạm bẫy mới; cập nhật README nếu có bước triển khai mới.
+- [ ] Thêm mục vào `prompts/LOG.md` cho yêu cầu này (cùng PR).
+- [ ] Commit, mô tả PR, bình luận PR, issue không có `Co-Authored-By` hay "Generated with Claude Code".
 
 Dùng kèm: `karpathy-guidelines`; skill chính chủ của stack nếu đã cài.

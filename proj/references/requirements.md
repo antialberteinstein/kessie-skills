@@ -4,7 +4,7 @@
 
 | Tầng | File | Vai trò |
 |---|---|---|
-| 1 | `docs/RequirementsOutline.md` | Hành vi sản phẩm đã chốt. **Thắng khi có mâu thuẫn.** Khung có sẵn trong `templates/ của skill kickoff: docs/` |
+| 1 | `docs/RequirementsOutline.md` | Hành vi sản phẩm đã chốt. **Thắng khi có mâu thuẫn.** Khung có sẵn trong `templates/docs/` |
 | 2 | `docs/modules/<Module>.md` | Phân rã từng module: màn hình, luồng, quy tắc, dữ liệu, AC. Mẫu: `references/module-breakdown-template.md` |
 | 3 | `prompts/NN-*.txt` và issue | Giao việc theo giai đoạn (`/kessie-skills:proj kickoff` › agent-setup) và theo PR (`/kessie-skills:proj status`) |
 

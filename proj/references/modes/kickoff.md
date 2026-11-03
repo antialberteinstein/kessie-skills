@@ -22,7 +22,7 @@ Nguyên tắc: **đặc tả có trước code · quyết định được ghi l
 | 1 | Đặc tả | `references/requirements.md`, `references/module-breakdown-template.md`, và quy trình của `references/modes/spec.md` | `docs/RequirementsOutline.md`, `docs/modules/*.md` có bảng AC | Người dùng duyệt; mỗi khả năng có AC kiểm chứng được, gồm các nhóm AC bắt buộc theo loại dự án |
 | 2 | Kiến trúc | `references/architecture.md`, `references/stack-options.md` | ADR cho các quyết định áp dụng với loại dự án; ADR cho phương án bị loại | Người dùng chấp nhận ADR |
 | 2b | Thiết kế (chỉ khi có UI) | `references/modes/design.md` §1–3 (script `<skill-dir>/scripts/design-md.sh`) | `DESIGN.md` (mẫu đã chọn hoặc tự soạn) + ADR thiết kế | Người dùng chọn hoặc duyệt DESIGN.md |
-| 3 | Nền repo | `references/repo-setup.md`, `references/agent-setup.md` | Git, scaffold, CLAUDE.md, CI xanh trên khung rỗng, `main` được bảo vệ | Commit đầu tiên đã push, CI xanh |
+| 3 | Nền repo | `references/repo-setup.md`, `references/agent-setup.md` | Git, scaffold, CLAUDE.md (có 3 quy tắc bắt buộc bên dưới), `prompts/LOG.md` có mục kickoff, CI xanh trên khung rỗng, `main` được bảo vệ | Commit đầu tiên đã push, CI xanh |
 | 4 | Kế hoạch | `references/agent-setup.md` §2, `references/task-prompt-template.txt` | `prompts/NN-*.txt` (nếu xây qua nhiều giai đoạn), milestone 0.1.0, issue (gợi ý người dùng gọi `/kessie-skills:proj plan`) | Backlog nằm trong issue tracker |
 
 Không bỏ cổng. Dự án nhỏ (CLI, thư viện, site tĩnh) được rút gọn theo `project-types.md`, nhưng tối thiểu vẫn phải có: idea brief + ADR stack + CLAUDE.md + CI, rồi mới viết code.
@@ -34,11 +34,16 @@ Không bỏ cổng. Dự án nhỏ (CLI, thư viện, site tĩnh) được rút 
 
 CLAUDE.md do scaffold tạo có sẵn mục "Quy trình với AI agent", liệt kê các chế độ của `/kessie-skills:proj`. Skill này **không tự kích hoạt**: agent chỉ gợi ý lệnh phù hợp để người dùng gọi.
 
+**Quy tắc bắt buộc trong CLAUDE.md** (giữ nguyên khi điền TODO, không lược bỏ; repo đã có CLAUDE.md thì bổ sung vào):
+1. Lưu prompt dựng dự án vào `prompts/LOG.md` (mục "Quy trình với AI agent"). Ngay khi scaffold xong, ghi mục đầu tiên trong `prompts/LOG.md`: yêu cầu kickoff và các quyết định của giai đoạn 0–2.
+2. Không ghi attribution của AI: không `Co-Authored-By` trong commit; không "Generated with Claude Code" trong issue, mô tả PR, bình luận PR (mục "Git và PR"). Áp dụng ngay từ commit đầu tiên của kickoff.
+3. Mục "Skill bổ trợ": bảng skill bổ trợ cho proj (hiện là `karpathy-guidelines`) kèm lệnh cài, và quy tắc "skill chưa cài thì agent gợi ý lệnh cài, không tự cài". Ngay trong kickoff, nếu skill trong bảng chưa có trong danh sách skill khả dụng thì gợi ý người dùng lệnh cài. Sau khi có ADR chọn stack, nếu stack có skill chính chủ (phụ lục của `docs/RECOMMENDED-SKILLS.md` trong repo [kessie-skills](https://github.com/antialberteinstein/kessie-skills/blob/main/docs/RECOMMENDED-SKILLS.md)), hỏi người dùng có muốn thêm vào bảng không.
+
 ## Tiếp nhận dự án đang dở
 
 1. Chạy `<skill-dir>/scripts/project-snapshot.sh <repo>` để biết trạng thái thật.
 2. Xác định loại dự án (bước 0), rồi đối chiếu bảng trên: thiếu ADR, CLAUDE.md, CI, hay backlog đang nằm rải rác?
-3. **Bổ sung, không viết lại:** viết lại ADR từ lịch sử (ghi rõ "ghi lại hồi tố"), tạo CLAUDE.md từ code thật, gom backlog về tracker. Trình danh sách lỗ hổng theo thứ tự ưu tiên để người dùng chọn.
+3. **Bổ sung, không viết lại:** viết lại ADR từ lịch sử (ghi rõ "ghi lại hồi tố"), tạo CLAUDE.md từ code thật (kèm 3 quy tắc bắt buộc ở trên; CLAUDE.md đã có thì chỉ thêm 3 quy tắc đó), tạo `prompts/LOG.md` nếu chưa có, gom backlog về tracker. Trình danh sách lỗ hổng theo thứ tự ưu tiên để người dùng chọn.
 
 ## 10 bài học (áp dụng từ ngày đầu)
 

@@ -10,7 +10,7 @@ bash <skill-dir>/scripts/scaffold.sh . --name "Tên dự án"           # chạy
 bash <skill-dir>/scripts/scaffold.sh . --name "Tên dự án" --apply   # ghi; KHÔNG ghi đè file đã có
 ```
 
-Scaffold tạo (từ `templates/`): `README.md`, `CHANGELOG.md`, `CLAUDE.md`, `.env.example`, `docs/RequirementsOutline.md`, `docs/decisions/README.md`, `docs/WORKFLOW.md`, `docs/SECURITY.md`, `prompts/README.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/{bug_report,feature_request,config}.yml`, `.github/workflows/ci.yml`, `.github/dependabot.yml`. Sau đó tìm `TODO` và điền theo idea brief và ADR.
+Scaffold tạo (từ `templates/`): `README.md`, `CHANGELOG.md`, `CLAUDE.md`, `.env.example`, `docs/RequirementsOutline.md`, `docs/decisions/README.md`, `docs/WORKFLOW.md`, `docs/SECURITY.md`, `prompts/README.md`, `prompts/LOG.md`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/ISSUE_TEMPLATE/{bug_report,feature_request,config}.yml`, `.github/workflows/ci.yml`, `.github/dependabot.yml`. Sau đó tìm `TODO` và điền theo idea brief và ADR.
 
 Khởi tạo project theo framework đã chọn trong ADR, dùng công cụ chính thức của framework (ví dụ `create-expo-app`, `npm create vite`, `flutter create`, `cargo new`), rồi chạy scaffold. Scaffold không ghi đè README hay .gitignore mà framework đã tạo; khi đó gộp nội dung bằng tay.
 

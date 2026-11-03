@@ -2,7 +2,7 @@
 
 ## 1. CLAUDE.md / AGENTS.md
 
-Khung có sẵn: `templates/ của skill kickoff: CLAUDE.md`. Nguyên tắc:
+Khung có sẵn: `templates/CLAUDE.md`. Nguyên tắc:
 
 - **Ngắn** (tối đa khoảng 120 dòng). Chỉ ghi điều agent **không tự suy ra được** từ code: quyết định, lý do, cạm bẫy, lệnh, quy ước có tranh cãi.
 - Thứ tự mục: một câu mô tả dự án → **Kiến trúc (đã quyết định, không mở lại)** kèm link ADR và phương án bị loại → Bố cục → Lệnh → Quy ước → Dữ liệu và bảo mật → Điểm dễ hỏng → Phiên bản và phát hành → Git và PR.
@@ -17,6 +17,7 @@ Kiểm tra CLAUDE.md:
 - [ ] Không chứa secret, URL project thật, email.
 - [ ] Không trùng lặp README (chỉ link sang).
 - [ ] Mọi lệnh trong file đều chạy được.
+- [ ] Có 3 quy tắc bắt buộc: lưu prompt vào `prompts/LOG.md`; không ghi attribution của AI (`Co-Authored-By`, "Generated with Claude Code") trong commit, issue, mô tả và bình luận PR; mục "Skill bổ trợ" có bảng skill kèm lệnh cài và quy tắc "chưa cài thì gợi ý, không tự cài".
 
 ## 2. Bộ prompt giao việc theo giai đoạn
 
@@ -29,6 +30,15 @@ Dùng khi xây phần lớn (nền tảng, một module mới) qua nhiều phiê
 - Rút gọn từ hội thoại: giữ ý định sản phẩm, bỏ phần trao đổi qua lại, gộp lời phê duyệt vào tác vụ. Lỗi không tạo prompt riêng, lỗi là issue.
 - Mỗi prompt ứng với một hoặc vài issue và một PR riêng (**không** dồn nhiều prompt vào một commit).
 - Cập nhật bảng trong `prompts/README.md`: file, mục đích, issue hoặc PR.
+
+### Nhật ký prompt (`prompts/LOG.md`)
+
+Khác với prompt giai đoạn (viết trước để giao việc), nhật ký ghi lại **mọi** yêu cầu thật của người dùng đã dựng nên dự án, kể cả sửa lỗi và thay đổi nhỏ.
+
+- Ghi một mục cho mỗi yêu cầu dẫn tới thay đổi trong repo, ở bất kỳ chế độ nào hoặc khi người dùng yêu cầu trực tiếp không qua lệnh: ngày · lệnh/ngữ cảnh · yêu cầu (rút gọn, giữ ý định và ràng buộc) · quyết định đã chốt · issue/PR.
+- Ghi trong cùng PR với thay đổi. Chỉ thêm, không sửa mục cũ; yêu cầu sau đổi ý thì ghi mục mới trỏ về mục cũ.
+- Câu hỏi thuần tuý (không đổi repo) không cần ghi.
+- Không ghi secret, token, URL môi trường thật, email, dữ liệu cá nhân.
 
 ## 3. Memory của agent
 

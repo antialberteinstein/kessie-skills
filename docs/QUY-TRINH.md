@@ -31,7 +31,7 @@ Mọi lệnh đều do **bạn gõ**. Agent chỉ gợi ý lệnh tiếp theo. B
 | 2 | (tiếp trong kickoff) | Viết `RequirementsOutline` + `docs/modules/*.md` có bảng AC | Duyệt spec |
 | 3 | (tiếp) | Đề xuất 2–3 phương án stack và kiến trúc kèm một khuyến nghị → ADR | Chọn stack, Auth, backend |
 | 4 | (tiếp, nếu có UI) | Đề xuất 3 mẫu DESIGN.md, hoặc soạn mẫu riêng | Chọn hoặc duyệt thiết kế |
-| 5 | (tiếp) | Khởi tạo project bằng công cụ chính thức của framework, chạy scaffold (16 file: README, CHANGELOG, CLAUDE.md, docs, CI, template PR/issue, `spec-inbox.md`), CI xanh | Tạo repo GitHub, push commit đầu, bảo vệ `main` |
+| 5 | (tiếp) | Khởi tạo project bằng công cụ chính thức của framework, chạy scaffold (17 file: README, CHANGELOG, CLAUDE.md, docs, CI, template PR/issue, `spec-inbox.md`, `prompts/LOG.md`), ghi mục đầu tiên vào `prompts/LOG.md`, CI xanh. CLAUDE.md luôn có 3 quy tắc: lưu prompt vào `prompts/LOG.md`; không ghi attribution của AI (`Co-Authored-By`, "Generated with Claude Code"); mục "Skill bổ trợ" (`karpathy-guidelines`, chưa cài thì agent gợi ý lệnh cài) | Tạo repo GitHub, push commit đầu, bảo vệ `main` |
 | 6 | `/kessie-skills:proj plan` | Tách AC thành issue cỡ một PR, theo thứ tự phụ thuộc, nhóm vào milestone `0.1.0` | Duyệt rồi mới tạo issue |
 
 Có thể dừng giữa chừng: lần sau gõ lại `/kessie-skills:proj kickoff tiếp nhận .` để agent đọc trạng thái và làm tiếp.
