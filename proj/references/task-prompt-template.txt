@@ -1,0 +1,27 @@
+TIÊU ĐỀ: <Động từ + kết quả, ví dụ "Xây nền tảng: đăng nhập, mô hình dữ liệu, điều hướng và CI">
+
+VAI TRÒ VÀ BỐI CẢNH
+Bạn là Senior Developer của <dự án> (<stack đã chọn theo ADR NNNN>). Đọc CLAUDE.md, docs/RequirementsOutline.md §<mục> và docs/modules/<Module>.md trước khi sửa. Đối chiếu repo hiện tại; nếu bắt đầu từ repo trống, không mặc định rằng code hoặc tài liệu đã có sẵn.
+
+MỤC TIÊU
+<1–3 câu: người dùng đạt được gì sau giai đoạn này.>
+
+PHẠM VI
+1. <Hành vi UI: vị trí điều hướng, form/trang, trạng thái trống/lỗi; chữ theo quy định i18n.>
+2. <Quy tắc nghiệp vụ: giá trị, ngày, thứ tự, xoá mềm, tổng/thống kê.>
+3. <Dữ liệu: thực thể/trường mới, migration hoặc rules, phân quyền chủ sở hữu, chặn tham chiếu chéo; hoặc "không đổi schema".>
+4. <Job nền/push nếu có, kèm fallback khi chưa cấu hình.>
+5. <Dữ liệu cũ và tương thích.>
+
+NGOÀI PHẠM VI
+<…>
+
+ĐẦU RA
+- Mã nguồn theo bố cục trong CLAUDE.md; tên file theo quy ước.
+- Migration/rules kèm test phân quyền chạy trên môi trường cô lập; đã nối vào CI.
+- Unit test cho logic; E2E cho luồng chính (desktop + mobile viewport nếu có web).
+- CHANGELOG [Unreleased]; README nếu có bước triển khai.
+- Báo cáo: lệnh đã chạy và kết quả; phần chưa xác minh trên thiết bị/môi trường thật.
+
+TIÊU CHÍ HOÀN THÀNH
+<Liệt kê AC-NN thành kết quả quan sát được.> Không coi build thành công, web preview hay test trên DB cô lập là bằng chứng đã triển khai production hoặc chạy đúng trên thiết bị thật.

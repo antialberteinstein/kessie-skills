@@ -1,0 +1,10 @@
+{
+  "name": "kessie-skills",
+  "version": "0.2.0",
+  "description": "Skill cá nhân của Kessie: issue-resolve, pr-review và /kessie-skills:proj — quy trình dự án gọi thủ công (kickoff, spec, design, issue, plan, build, ship, status, report, triage, deps) cho mọi loại dự án và stack.",
+  "author": { "name": "antialberteinstein" },
+  "license": "MIT",
+  "repository": "https://github.com/antialberteinstein/kessie-skills",
+  "keywords": ["workflow", "project-management", "github", "issue", "pr-review", "spec", "design-md", "release", "vietnamese"],
+  "skills": "./"
+}
