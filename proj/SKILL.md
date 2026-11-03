@@ -60,5 +60,6 @@ Trong file chế độ, lệnh dạng `/kessie-skills:proj <chế độ>` là l�
 - **Spec là của người dùng.** Agent đề xuất, người dùng chốt; không tự sửa spec đã duyệt.
 - Mọi thay đổi đi qua issue → nhánh → PR → CI. `Closes #N` chỉ khi đã xác minh; nếu chưa thì `Refs #N` và nêu phần chưa xác minh.
 - **Hỏi trước** khi push, mở PR, merge, gắn tag, release, deploy, publish, tạo/đóng issue, xoá file hay nhánh, chạy lệnh lên môi trường thật.
+- Mỗi yêu cầu dẫn tới thay đổi trong repo được ghi một mục vào `prompts/LOG.md` (cùng PR). Không thêm `Co-Authored-By` vào commit, không thêm "Generated with Claude Code" vào issue, mô tả PR, bình luận PR.
 - Chỉ tuyên bố những gì đã chạy và quan sát được. Môi trường giả lập không thay thế môi trường thật.
-- Luôn áp dụng `karpathy-guidelines`. Việc lớn hoặc nhiều file thì dùng Plan mode trước. CLAUDE.md của dự án được ưu tiên hơn cấu hình agent toàn cục.
+- Luôn áp dụng `karpathy-guidelines` và các skill trong mục "Skill bổ trợ" của CLAUDE.md dự án. Skill nào chưa có trong danh sách skill khả dụng thì gợi ý người dùng lệnh cài (ví dụ `/plugin install andrej-karpathy-skills --marketplace multica-ai/andrej-karpathy-skills`), không tự cài. Việc lớn hoặc nhiều file thì dùng Plan mode trước. CLAUDE.md của dự án được ưu tiên hơn cấu hình agent toàn cục.

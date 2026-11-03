@@ -19,7 +19,7 @@ Nền tảng đích · số người dùng và có chia sẻ dữ liệu không 
 | 7 | Phân phối và phiên bản | Store hay nội bộ; ai quản lý build number; cập nhật OTA không? |
 | 8 | Chiến lược kiểm thử | Unit / E2E (backend giả lập) / DB cô lập / thiết bị thật: công cụ cho từng lớp |
 
-Mẫu ma trận và các bộ stack tham khảo: `references/stack-options.md`. Mẫu ADR: `templates/ của skill kickoff: docs/decisions/README.md`.
+Mẫu ma trận và các bộ stack tham khảo: `references/stack-options.md`. Mẫu ADR: `templates/docs/decisions/README.md`.
 
 ## 3. Cách trình bày lựa chọn cho người dùng
 

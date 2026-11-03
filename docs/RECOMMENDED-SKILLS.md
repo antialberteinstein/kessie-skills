@@ -11,6 +11,8 @@ Số liệu lấy từ GitHub API ngày **2026-11-03**. Tên skill đã đối c
 | Plan mode có sẵn của Claude Code (Shift+Tab hai lần) | Lập kế hoạch chỉ đọc rồi chờ duyệt | Không cần cài gì |
 | Skill chính chủ của stack đã chọn (phụ lục) | Kiến thức về framework và dịch vụ | Chỉ thêm sau khi đã có ADR chọn stack |
 
+`/kessie-skills:proj kickoff` ghi bộ tối thiểu (hiện là `karpathy-guidelines`) vào mục "Skill bổ trợ" của CLAUDE.md dự án, kèm lệnh cài `/plugin install andrej-karpathy-skills --marketplace multica-ai/andrej-karpathy-skills`. Đầu mỗi phiên, skill nào chưa cài thì agent gợi ý lệnh cài, không tự cài. Skill chính chủ của stack (phụ lục) chỉ được thêm vào bảng sau ADR, khi người dùng đồng ý.
+
 Skill tự kích hoạt chỉ còn karpathy + skill của stack, nên Claude ít chọn nhầm. `kessie-skills` và ECC có thể cài song song: muốn dùng quy trình nào thì gọi lệnh của quy trình đó.
 
 ## Tùy chọn (chỉ thêm khi thực sự thiếu)
