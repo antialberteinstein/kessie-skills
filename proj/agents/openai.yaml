@@ -1,0 +1,6 @@
+interface:
+  display_name: "Proj"
+  short_description: "Manual project workflow: kickoff, spec, design, issue, build, ship"
+  default_prompt: "Use $proj to suggest the next step for this project."
+policy:
+  allow_implicit_invocation: false

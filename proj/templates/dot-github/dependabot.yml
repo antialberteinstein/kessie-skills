@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm # đổi: pip | cargo | pub | gradle …
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    # Gói phải đi cùng nhau thì gom nhóm.
+    # groups:
+    #   react:
+    #     patterns: ["react", "react-dom", "@types/react"]
+    # Gói do framework ghim phiên bản (SDK/platform) → bỏ qua major, nâng cùng framework.
+    # ignore:
+    #   - dependency-name: "framework-*"
+    #     update-types: ["version-update:semver-major"]

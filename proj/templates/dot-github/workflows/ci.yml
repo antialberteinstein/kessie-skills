@@ -1,0 +1,45 @@
+# CI skeleton (Node mặc định). Đổi bước cài đặt/lệnh cho stack khác — xem ghi chú cuối file.
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call: # cho phép workflow release gọi lại toàn bộ CI
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  CI: true
+  # Giá trị giả cho biến public để build/test không cần secret thật.
+  # TODO_PUBLIC_API_URL: https://ci.example.invalid
+jobs:
+  quality:
+    name: Quality, tests and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run --if-present typecheck
+      - run: npm run --if-present lint
+      - run: npm run --if-present format:check
+      - run: npm run --if-present test:coverage
+      - run: npm run --if-present build
+      - name: Dependency audit (advisory)
+        continue-on-error: true
+        run: npm audit --omit=dev
+  # e2e:          # TODO: Playwright/Cypress/Detox… với backend giả lập, lưu report làm artifact
+  # database:     # TODO: service postgres:16 cô lập → bootstrap → migrations → SQL test suites
+# Stack khác:
+#   Python: actions/setup-python + pip install -e .[dev] + ruff/mypy/pytest
+#   Flutter: subosito/flutter-action + flutter analyze + flutter test
+#   Rust: dtolnay/rust-toolchain + cargo fmt --check + cargo clippy + cargo test

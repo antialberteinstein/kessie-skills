@@ -1,0 +1,6 @@
+# {{PROJECT_NAME}} — biến môi trường mẫu. Sao chép thành .env (đã được gitignore) và điền giá trị.
+# Chỉ biến PUBLIC (được nhúng vào client) được đặt tiền tố public của framework, ví dụ EXPO_PUBLIC_ / NEXT_PUBLIC_ / VITE_.
+# KHÔNG đặt service-role key, secret của cron/webhook, private key vào file client.
+
+# TODO_PUBLIC_API_URL=https://example.invalid
+# TODO_PUBLIC_PUBLISHABLE_KEY=replace-me
