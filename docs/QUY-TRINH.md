@@ -1,6 +1,6 @@
 # Quy trình xây dựng dự án với kessie-skills (`/kessie-skills:proj`)
 
-Mọi lệnh đều do **bạn gõ**. Agent chỉ gợi ý lệnh tiếp theo. Bạn quyết định spec, thiết kế, kiến trúc, và mọi thao tác ra bên ngoài (push, PR, merge, tag, release, tạo issue).
+Bạn **không cần gõ lệnh**: cứ nói việc muốn làm, agent tự gọi `/kessie-skills:proj <chế độ>` phù hợp (vẫn gõ tay được nếu muốn). Sang giai đoạn kế tiếp thì agent hỏi trước. Bạn quyết định spec, thiết kế, kiến trúc, và mọi thao tác ra bên ngoài (push, PR, merge, tag, release, tạo issue).
 
 ```
         ┌──────────── KHỞI ĐỘNG (một lần) ────────────┐
@@ -31,7 +31,7 @@ Mọi lệnh đều do **bạn gõ**. Agent chỉ gợi ý lệnh tiếp theo. B
 | 2 | (tiếp trong kickoff) | Viết `RequirementsOutline` + `docs/modules/*.md` có bảng AC | Duyệt spec |
 | 3 | (tiếp) | Đề xuất 2–3 phương án stack và kiến trúc kèm một khuyến nghị → ADR | Chọn stack, Auth, backend |
 | 4 | (tiếp, nếu có UI) | Đề xuất 3 mẫu DESIGN.md, hoặc soạn mẫu riêng | Chọn hoặc duyệt thiết kế |
-| 5 | (tiếp) | Khởi tạo project bằng công cụ chính thức của framework, chạy scaffold (17 file: README, CHANGELOG, CLAUDE.md, docs, CI, template PR/issue, `spec-inbox.md`, `prompts/LOG.md`), ghi mục đầu tiên vào `prompts/LOG.md`, CI xanh. CLAUDE.md luôn có 3 quy tắc: lưu prompt vào `prompts/LOG.md`; không ghi attribution của AI (`Co-Authored-By`, "Generated with Claude Code"); mục "Skill bổ trợ" (`karpathy-guidelines`, chưa cài thì agent gợi ý lệnh cài) | Tạo repo GitHub, push commit đầu, bảo vệ `main` |
+| 5 | (tiếp) | Khởi tạo project bằng công cụ chính thức của framework, chạy scaffold (17 file: README, CHANGELOG, CLAUDE.md, docs, CI, template PR/issue, `spec-inbox.md`, `prompts/LOG.md`), ghi mục đầu tiên vào `prompts/LOG.md`, CI xanh. CLAUDE.md luôn có 4 quy tắc: lưu prompt vào `prompts/LOG.md`; không ghi attribution của AI (`Co-Authored-By`, "Generated with Claude Code"); mục "Skill bổ trợ" (`proj`, `karpathy-guidelines`, chưa cài thì agent gợi ý lệnh cài); agent tự gọi skill theo cột "Khi nào gọi" | Tạo repo GitHub, push commit đầu, bảo vệ `main` |
 | 6 | `/kessie-skills:proj plan` | Tách AC thành issue cỡ một PR, theo thứ tự phụ thuộc, nhóm vào milestone `0.1.0` | Duyệt rồi mới tạo issue |
 
 Có thể dừng giữa chừng: lần sau gõ lại `/kessie-skills:proj kickoff tiếp nhận .` để agent đọc trạng thái và làm tiếp.
@@ -92,4 +92,4 @@ Sau đó bạn kiểm tra trên chính artifact vừa phát hành (thiết bị 
 
 ## Khi dùng ECC cho một dự án khác
 
-Không cần làm gì. kessie-skills không tự kích hoạt và không chiếm ngữ cảnh. Chỉ dự án nào bạn gõ `/kessie-skills:proj …` mới dùng quy trình này.
+Skill `proj` có thể được agent tự gọi ở mọi dự án khi yêu cầu khớp mô tả của nó. Dự án dùng quy trình khác thì ghi vào CLAUDE.md của dự án đó: "Không dùng skill `kessie-skills:proj`", hoặc tắt plugin cho dự án đó (`/plugin`).

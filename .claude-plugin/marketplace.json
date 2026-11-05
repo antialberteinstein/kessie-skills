@@ -6,7 +6,7 @@
     {
       "name": "kessie-skills",
       "source": "./",
-      "description": "issue-resolve, pr-review và /kessie-skills:proj — quy trình dự án gọi thủ công cho mọi loại dự án và stack"
+      "description": "issue-resolve, pr-review, setup-project, add-preset, harness-check và /kessie-skills:proj — quy trình dự án agent tự gọi theo yêu cầu, cho mọi loại dự án và stack"
     }
   ]
 }
