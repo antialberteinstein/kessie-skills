@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Sync Skills README](https://github.com/antialberteinstein/kessie-skills/actions/workflows/sync-skills-readme.yml/badge.svg)](https://github.com/antialberteinstein/kessie-skills/actions/workflows/sync-skills-readme.yml)
-<!-- SKILLS_COUNT_START -->![Skills Count](https://img.shields.io/badge/skills-3-blue.svg?style=flat-square)<!-- SKILLS_COUNT_END -->
+<!-- SKILLS_COUNT_START -->![Skills Count](https://img.shields.io/badge/skills-6-blue.svg?style=flat-square)<!-- SKILLS_COUNT_END -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](./LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](./CONTRIBUTING.md)
 
@@ -26,9 +26,12 @@
 <!-- SKILLS_TABLE_START -->
 | Skill | Trigger / Slash Command | Description |
 | :--- | :--- | :--- |
+| **[`add-preset`](./add-preset/SKILL.md)** | `/add-preset` | Thêm hoặc sửa một nhóm (preset) trong catalog của /setup-project, sau khi tra cứu thành phần thật trong ECC và marketplace chính thức |
+| **[`harness-check`](./harness-check/SKILL.md)** | `/harness-check` | Kiểm tra cấu hình Claude Code (user và project hiện tại), báo lỗi, chồng chéo và đề xuất cách sửa |
 | **[`issue-resolve`](./issue-resolve/SKILL.md)** | `/issue-resolve`, `/resolve-issue` | Resolve a GitHub issue end-to-end: fetch issue details, reproduce, implement fix, test, submit PR, and iterate on review feedback. |
 | **[`pr-review`](./pr-review/SKILL.md)** | `/pr-review`, `/pull-request-review` | Review or test a GitHub pull request. Inspects diffs, analyzes code quality, security, and test coverage, and provides actionable feedback. |
 | **[`proj`](./proj/SKILL.md)** | `/proj` | Quy trình dự án cho một người làm cùng AI agent, mọi loại dự án và stack — khởi động, spec (người dùng chốt), DESIGN.md, tạo issue, build issue → PR, kiểm chứng, phát hành, trạng thái và bảo trì. Dùng khi người dùng muốn bắt đầu hoặc tiếp nhận dự án, mô tả/thảo luận tính năng, chọn giao diện, tạo issue hay lên kế hoạch, làm một issue, kiểm chứng hay phát hành, hỏi trạng thái hoặc bước tiếp theo — kể cả khi không gõ lệnh, nhất là khi CLAUDE.md dự án trỏ tới proj. Tham số: từ đầu là chế độ (kickoff, spec, design, issue, plan, build, ship, status, report, triage, deps); trống thì gợi ý bước tiếp theo. |
+| **[`setup-project`](./setup-project/SKILL.md)** | `/setup-project` | Phân tích project hiện tại rồi đề xuất và cài plugin, skill, agent ở scope project |
 <!-- SKILLS_TABLE_END -->
 
 > *Note: This table and badge are automatically updated by GitHub Actions whenever a new skill directory with a `SKILL.md` is added or modified.*
@@ -191,6 +194,20 @@ Every outward-facing action (push, PR, merge, tag, release, issue creation) asks
 
 ---
 
+### Using `setup-project`, `add-preset`, `harness-check`
+
+Manual-only (`disable-model-invocation: true`) helpers for the Claude Code harness. Instructions are written in Vietnamese.
+
+| Command | What it does |
+| :--- | :--- |
+| `/kessie-skills:setup-project [status \| thêm <nhóm> \| gỡ <nhóm> \| cập nhật]` | Scans the current project, proposes LSP plugins and ECC skills/agents from [`setup-project/catalog.md`](./setup-project/catalog.md), and installs them into `./.claude/` only after you confirm |
+| `/kessie-skills:add-preset <description>` | Looks up real ECC / official-marketplace components and adds a preset to the catalog in your clone of this repo (`KESSIE_REPO`) |
+| `/kessie-skills:harness-check [offline \| sửa luôn]` | Read-only audit of user + project config: invalid JSON, enabled-but-missing plugins, missing LSP binaries, overlapping skills, secrets in `env`, broken `statusLine` |
+
+`setup-project/scripts/ecc-project.sh` clones [affaan-m/ECC](https://github.com/affaan-m/ECC) into a temp dir (pin with `ECC_REF`) and needs `git` and `jq`. Both scripts run on macOS's stock bash 3.2.
+
+---
+
 ## Automated Skills Sync
 
 This repository includes a GitHub Action workflow ([`.github/workflows/sync-skills-readme.yml`](./.github/workflows/sync-skills-readme.yml)) that runs on every push or PR touching `*/SKILL.md`:
@@ -221,12 +238,19 @@ kessie-skills/
 │   └── RECOMMENDED-SKILLS.md       # Companion skills to use with proj
 ├── scripts/
 │   └── update-readme.py            # Dynamic skills scanner & README generator
+├── tests/
+│   └── scripts-test.sh             # Offline tests for harness-check.sh and ecc-project.sh
 ├── .gitignore                      # Standard ignore rules
 ├── CONTRIBUTING.md                 # Skill authoring guidelines
 ├── LICENSE                         # MIT License
 ├── README.md                       # Project documentation
 ├── install.sh                      # Multi-harness deployment script
 ├── uninstall.sh                    # Clean uninstallation script
+├── add-preset/
+│   └── SKILL.md                    # Add a preset to setup-project's catalog
+├── harness-check/
+│   ├── SKILL.md                    # Harness audit report + guided fixes
+│   └── scripts/harness-check.sh    # Read-only checker (OK/WARN/FAIL)
 ├── issue-resolve/
 │   └── SKILL.md                    # Issue resolution workflow
 ├── pr-review/
@@ -238,6 +262,10 @@ kessie-skills/
     ├── references/*.md             # Role guides, templates, project types
     ├── scripts/                    # scaffold, snapshot, check-release, design-md, contrast
     └── templates/                  # Repo scaffold files
+└── setup-project/
+    ├── SKILL.md                    # Propose + install project-scoped plugins/skills/agents
+    ├── catalog.md                  # The only things setup-project may suggest
+    └── scripts/ecc-project.sh      # Add/remove ECC skills & agents in ./.claude
 ```
 
 ---

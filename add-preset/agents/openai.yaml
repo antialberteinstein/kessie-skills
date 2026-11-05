@@ -1,0 +1,6 @@
+interface:
+  display_name: "Add Preset"
+  short_description: "Add or edit a preset in the setup-project catalog"
+  default_prompt: "Use $add-preset to add a catalog preset for this kind of project."
+policy:
+  allow_implicit_invocation: false
