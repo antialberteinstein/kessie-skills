@@ -50,20 +50,23 @@ Loại dự án: TODO (app · web/SaaS · API · thư viện · CLI · site tĩn
 
 ## Quy trình với AI agent
 
-- Quy trình chi tiết nằm trong lệnh `/kessie-skills:proj <chế độ>` (người dùng tự gõ; agent không tự gọi, chỉ gợi ý chế độ phù hợp). Gõ `/kessie-skills:proj` không kèm chế độ để xem bước tiếp theo.
+- Quy trình chi tiết nằm trong skill `proj` (`/kessie-skills:proj <chế độ>`). **Agent tự gọi skill này bằng Skill tool** khi yêu cầu khớp một chế độ; người dùng không cần gõ lệnh: bắt đầu hoặc tiếp nhận dự án → `kickoff`; mô tả, thảo luận tính năng, ý tưởng thô → `spec`; giao diện → `design`; tạo issue, lên kế hoạch → `issue` / `plan`; làm issue, sửa lỗi → `build`; kiểm chứng, phát hành → `ship`; trạng thái, bước tiếp theo → `status` hoặc không kèm chế độ. Sang giai đoạn kế tiếp thì hỏi người dùng trước, đồng ý thì agent tự gọi.
 - Spec là của người dùng: `docs/RequirementsOutline.md`, `docs/modules/`, ý tưởng thô ở `docs/spec-inbox.md`. Agent đề xuất, người dùng duyệt; không tự sửa spec đã duyệt.
 - Mọi thay đổi đi qua issue → nhánh → PR → CI. `Closes #N` chỉ khi đã xác minh; nếu còn phần chưa xác minh thì dùng `Refs #N`.
 - **Lưu prompt dựng dự án vào `prompts/LOG.md`.** Mỗi yêu cầu của người dùng dẫn tới thay đổi trong repo (spec, thiết kế, kiến trúc, code, sửa lỗi, phát hành) được ghi một mục: ngày · lệnh/ngữ cảnh · yêu cầu (rút gọn, giữ ý định) · quyết định đã chốt · issue/PR. Ghi trong cùng PR với thay đổi; chỉ thêm mục mới, không sửa mục cũ. Không ghi secret, token, URL môi trường thật hay dữ liệu cá nhân.
 - Hỏi người dùng trước khi push, mở PR, merge, gắn tag, release, deploy, publish, tạo issue, hoặc chạy lệnh lên môi trường thật.
 - Giao diện theo `DESIGN.md` (nếu có); token nằm ở TODO.
-- Luôn áp dụng các skill trong mục "Skill bổ trợ". Việc lớn hoặc nhiều file thì trình kế hoạch trong Plan mode trước. Nếu cấu hình agent toàn cục mâu thuẫn với file này, file này được ưu tiên.
+- Tự gọi các skill trong mục "Skill bổ trợ" khi tình huống khớp. Việc lớn hoặc nhiều file thì trình kế hoạch trong Plan mode trước. Nếu cấu hình agent toàn cục mâu thuẫn với file này, file này được ưu tiên.
 
 ## Skill bổ trợ
 
-| Skill | Vai trò | Lệnh cài (Claude Code) |
-|---|---|---|
-| `karpathy-guidelines` ([multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)) | Nghĩ trước khi code · đơn giản trước · sửa đúng chỗ · định nghĩa "xong" bằng tiêu chí kiểm chứng được. Luôn áp dụng | `/plugin install andrej-karpathy-skills --marketplace multica-ai/andrej-karpathy-skills` |
+| Skill | Vai trò | Khi nào gọi | Lệnh cài (Claude Code) |
+|---|---|---|---|
+| `kessie-skills:proj` ([antialberteinstein/kessie-skills](https://github.com/antialberteinstein/kessie-skills)) | Quy trình dự án: kickoff · spec · design · issue/plan · build · ship · status | Yêu cầu khớp một chế độ (xem mục "Quy trình với AI agent") | `/plugin install kessie-skills --marketplace antialberteinstein/kessie-skills` |
+| `karpathy-guidelines` ([multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills)) | Nghĩ trước khi code · đơn giản trước · sửa đúng chỗ · định nghĩa "xong" bằng tiêu chí kiểm chứng được | Trước khi viết, review hoặc refactor code | `/plugin install andrej-karpathy-skills --marketplace multica-ai/andrej-karpathy-skills` |
 
+- **Agent tự gọi skill** trong bảng bằng Skill tool ngay khi tình huống khớp cột "Khi nào gọi", trước khi làm phần việc đó, và nói một dòng "Dùng skill X để …". Không chờ người dùng gõ lệnh, không hỏi xin phép chỉ để gọi skill. Tự gọi skill không thay cho việc hỏi trước các thao tác ra bên ngoài.
+- Thêm skill vào bảng (ví dụ skill của stack sau ADR) thì luôn điền cột "Khi nào gọi" bằng tình huống cụ thể.
 - **Đầu mỗi phiên**, kiểm tra từng skill trong bảng có nằm trong danh sách skill khả dụng của agent không. Thiếu skill nào thì **gợi ý** người dùng lệnh cài ở cột cuối, một lần mỗi phiên. **Không tự cài**, không sửa settings của người dùng.
 - Khi skill chưa được cài, vẫn làm theo nguyên tắc ở cột "Vai trò".
 

@@ -6,14 +6,14 @@ Số liệu lấy từ GitHub API ngày **2026-11-03**. Tên skill đã đối c
 
 | Thành phần | Vai trò | Ghi chú |
 |---|---|---|
-| Plugin `kessie-skills` (một lệnh `/kessie-skills:proj`, nhiều chế độ) | Quy trình cá nhân: khởi động · làm issue/PR · kiểm chứng và phát hành · quản lý và bảo trì | Chỉ chạy khi gọi lệnh, không tốn ngữ cảnh khi không dùng |
+| Plugin `kessie-skills` (một lệnh `/kessie-skills:proj`, nhiều chế độ) | Quy trình cá nhân: khởi động · làm issue/PR · kiểm chứng và phát hành · quản lý và bảo trì | Agent tự gọi khi yêu cầu khớp một chế độ; chỉ mô tả skill nằm trong ngữ cảnh khi chưa dùng |
 | [`karpathy-guidelines`](https://github.com/multica-ai/andrej-karpathy-skills) (229k★) | Nguyên tắc hành vi: nghĩ trước khi code, đơn giản trước, sửa đúng chỗ, định nghĩa "xong" | 1 skill, không có hook, không phụ thuộc stack. **Luôn bật** |
 | Plan mode có sẵn của Claude Code (Shift+Tab hai lần) | Lập kế hoạch chỉ đọc rồi chờ duyệt | Không cần cài gì |
 | Skill chính chủ của stack đã chọn (phụ lục) | Kiến thức về framework và dịch vụ | Chỉ thêm sau khi đã có ADR chọn stack |
 
-`/kessie-skills:proj kickoff` ghi bộ tối thiểu (hiện là `karpathy-guidelines`) vào mục "Skill bổ trợ" của CLAUDE.md dự án, kèm lệnh cài `/plugin install andrej-karpathy-skills --marketplace multica-ai/andrej-karpathy-skills`. Đầu mỗi phiên, skill nào chưa cài thì agent gợi ý lệnh cài, không tự cài. Skill chính chủ của stack (phụ lục) chỉ được thêm vào bảng sau ADR, khi người dùng đồng ý.
+`/kessie-skills:proj kickoff` ghi bộ tối thiểu (hiện là `karpathy-guidelines`) vào mục "Skill bổ trợ" của CLAUDE.md dự án, kèm lệnh cài `/plugin install andrej-karpathy-skills --marketplace multica-ai/andrej-karpathy-skills`. Mỗi skill trong bảng có cột "Khi nào gọi"; agent tự gọi skill khi tình huống khớp, không chờ người dùng gõ lệnh. Đầu mỗi phiên, skill nào chưa cài thì agent gợi ý lệnh cài, không tự cài. Skill chính chủ của stack (phụ lục) chỉ được thêm vào bảng sau ADR, khi người dùng đồng ý.
 
-Skill tự kích hoạt chỉ còn karpathy + skill của stack, nên Claude ít chọn nhầm. `kessie-skills` và ECC có thể cài song song: muốn dùng quy trình nào thì gọi lệnh của quy trình đó.
+Skill tự kích hoạt chỉ gồm `proj`, karpathy và skill của stack, nên Claude ít chọn nhầm. Không nên bật song song với ECC: cả hai đều có skill quy trình tự kích hoạt và sẽ tranh nhau.
 
 ## Tùy chọn (chỉ thêm khi thực sự thiếu)
 

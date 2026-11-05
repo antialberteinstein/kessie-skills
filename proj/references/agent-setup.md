@@ -17,7 +17,7 @@ Kiểm tra CLAUDE.md:
 - [ ] Không chứa secret, URL project thật, email.
 - [ ] Không trùng lặp README (chỉ link sang).
 - [ ] Mọi lệnh trong file đều chạy được.
-- [ ] Có 3 quy tắc bắt buộc: lưu prompt vào `prompts/LOG.md`; không ghi attribution của AI (`Co-Authored-By`, "Generated with Claude Code") trong commit, issue, mô tả và bình luận PR; mục "Skill bổ trợ" có bảng skill kèm lệnh cài và quy tắc "chưa cài thì gợi ý, không tự cài".
+- [ ] Có 4 quy tắc bắt buộc: lưu prompt vào `prompts/LOG.md`; không ghi attribution của AI (`Co-Authored-By`, "Generated with Claude Code") trong commit, issue, mô tả và bình luận PR; mục "Skill bổ trợ" có bảng skill kèm lệnh cài và quy tắc "chưa cài thì gợi ý, không tự cài"; agent tự gọi skill (`proj` theo chế độ, mỗi skill bổ trợ có cột "Khi nào gọi"), không chờ người dùng gõ lệnh.
 
 ## 2. Bộ prompt giao việc theo giai đoạn
 

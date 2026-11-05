@@ -28,7 +28,7 @@
 | :--- | :--- | :--- |
 | **[`issue-resolve`](./issue-resolve/SKILL.md)** | `/issue-resolve`, `/resolve-issue` | Resolve a GitHub issue end-to-end: fetch issue details, reproduce, implement fix, test, submit PR, and iterate on review feedback. |
 | **[`pr-review`](./pr-review/SKILL.md)** | `/pr-review`, `/pull-request-review` | Review or test a GitHub pull request. Inspects diffs, analyzes code quality, security, and test coverage, and provides actionable feedback. |
-| **[`proj`](./proj/SKILL.md)** | `/proj` | Quy trình dự án cho một người làm cùng AI agent, mọi loại dự án và stack — khởi động, spec (người dùng chốt), DESIGN.md, tạo issue, build issue → PR, kiểm chứng, phát hành, trạng thái và bảo trì. Gọi thủ công kèm chế độ; không kèm chế độ thì gợi ý bước tiếp theo. |
+| **[`proj`](./proj/SKILL.md)** | `/proj` | Quy trình dự án cho một người làm cùng AI agent, mọi loại dự án và stack — khởi động, spec (người dùng chốt), DESIGN.md, tạo issue, build issue → PR, kiểm chứng, phát hành, trạng thái và bảo trì. Dùng khi người dùng muốn bắt đầu hoặc tiếp nhận dự án, mô tả/thảo luận tính năng, chọn giao diện, tạo issue hay lên kế hoạch, làm một issue, kiểm chứng hay phát hành, hỏi trạng thái hoặc bước tiếp theo — kể cả khi không gõ lệnh, nhất là khi CLAUDE.md dự án trỏ tới proj. Tham số: từ đầu là chế độ (kickoff, spec, design, issue, plan, build, ship, status, report, triage, deps); trống thì gợi ý bước tiếp theo. |
 <!-- SKILLS_TABLE_END -->
 
 > *Note: This table and badge are automatically updated by GitHub Actions whenever a new skill directory with a `SKILL.md` is added or modified.*
@@ -159,7 +159,7 @@ Invoke with the pull request number or URL:
 
 ### Using `proj`
 
-A manual-only (`disable-model-invocation: true`) project workflow for a solo developer working with an AI agent — one command, many modes. It never fires on its own, so it costs no context when unused. Instructions are written in Vietnamese.
+A project workflow for a solo developer working with an AI agent — one skill, many modes. The agent invokes it on its own (via the Skill tool) when your request matches a mode, so you don't have to type the command; you can still type it explicitly. Moving to the next phase always asks you first. `kickoff` writes this rule into the project's CLAUDE.md, along with a "Skill bổ trợ" table that tells the agent when to invoke each companion skill. Instructions are written in Vietnamese.
 
 ```
 /kessie-skills:proj                       → suggest the single next step
@@ -187,7 +187,7 @@ A manual-only (`disable-model-invocation: true`) project workflow for a solo dev
 
 Every outward-facing action (push, PR, merge, tag, release, issue creation) asks you first. Full workflow: **[docs/QUY-TRINH.md](./docs/QUY-TRINH.md)** · Companion skills: **[docs/RECOMMENDED-SKILLS.md](./docs/RECOMMENDED-SKILLS.md)**.
 
-> `proj` uses Claude Code–specific frontmatter (`argument-hint`, `disable-model-invocation`, `allowed-tools` with `${CLAUDE_SKILL_DIR}`). Under Codex, `agents/openai.yaml` sets `allow_implicit_invocation: false` to keep it manual-only.
+> `proj` uses Claude Code–specific frontmatter (`argument-hint`, `allowed-tools` with `${CLAUDE_SKILL_DIR}`). Under Codex, `agents/openai.yaml` sets `allow_implicit_invocation: true` so the agent can invoke it too.
 
 ---
 
@@ -233,7 +233,7 @@ kessie-skills/
 │   └── SKILL.md                    # PR review and testing workflow
 └── proj/
     ├── SKILL.md                    # Mode router + shared principles
-    ├── agents/openai.yaml          # Codex metadata (manual-only)
+    ├── agents/openai.yaml          # Codex metadata
     ├── references/modes/*.md       # kickoff, spec, design, build, ship, lead
     ├── references/*.md             # Role guides, templates, project types
     ├── scripts/                    # scaffold, snapshot, check-release, design-md, contrast

@@ -6,7 +6,7 @@ Tham số (phần sau tên chế độ):
 - `module <tên>` → chỉ chạy giai đoạn 1 (đặc tả) cho module mới. Thực ra đây là việc của `/kessie-skills:proj spec`; gợi ý người dùng dùng lệnh đó.
 - Còn lại → coi là mô tả ý tưởng, bắt đầu từ giai đoạn 0.
 
-Nguyên tắc: **đặc tả có trước code · quyết định được ghi lại · mọi thay đổi đi qua issue → PR → CI · "xong" phải có bằng chứng.** Sau khi khởi động, người dùng gọi `/kessie-skills:proj spec` (mô tả, thảo luận spec), `/kessie-skills:proj design` (giao diện), `/kessie-skills:proj build`, `/kessie-skills:proj ship`, `/kessie-skills:proj status`.
+Nguyên tắc: **đặc tả có trước code · quyết định được ghi lại · mọi thay đổi đi qua issue → PR → CI · "xong" phải có bằng chứng.** Sau khi khởi động, agent tự gọi (khi yêu cầu khớp) `/kessie-skills:proj spec` (mô tả, thảo luận spec), `/kessie-skills:proj design` (giao diện), `/kessie-skills:proj build`, `/kessie-skills:proj ship`, `/kessie-skills:proj status`.
 
 
 
@@ -22,8 +22,8 @@ Nguyên tắc: **đặc tả có trước code · quyết định được ghi l
 | 1 | Đặc tả | `references/requirements.md`, `references/module-breakdown-template.md`, và quy trình của `references/modes/spec.md` | `docs/RequirementsOutline.md`, `docs/modules/*.md` có bảng AC | Người dùng duyệt; mỗi khả năng có AC kiểm chứng được, gồm các nhóm AC bắt buộc theo loại dự án |
 | 2 | Kiến trúc | `references/architecture.md`, `references/stack-options.md` | ADR cho các quyết định áp dụng với loại dự án; ADR cho phương án bị loại | Người dùng chấp nhận ADR |
 | 2b | Thiết kế (chỉ khi có UI) | `references/modes/design.md` §1–3 (script `<skill-dir>/scripts/design-md.sh`) | `DESIGN.md` (mẫu đã chọn hoặc tự soạn) + ADR thiết kế | Người dùng chọn hoặc duyệt DESIGN.md |
-| 3 | Nền repo | `references/repo-setup.md`, `references/agent-setup.md` | Git, scaffold, CLAUDE.md (có 3 quy tắc bắt buộc bên dưới), `prompts/LOG.md` có mục kickoff, CI xanh trên khung rỗng, `main` được bảo vệ | Commit đầu tiên đã push, CI xanh |
-| 4 | Kế hoạch | `references/agent-setup.md` §2, `references/task-prompt-template.txt` | `prompts/NN-*.txt` (nếu xây qua nhiều giai đoạn), milestone 0.1.0, issue (gợi ý người dùng gọi `/kessie-skills:proj plan`) | Backlog nằm trong issue tracker |
+| 3 | Nền repo | `references/repo-setup.md`, `references/agent-setup.md` | Git, scaffold, CLAUDE.md (có 4 quy tắc bắt buộc bên dưới), `prompts/LOG.md` có mục kickoff, CI xanh trên khung rỗng, `main` được bảo vệ | Commit đầu tiên đã push, CI xanh |
+| 4 | Kế hoạch | `references/agent-setup.md` §2, `references/task-prompt-template.txt` | `prompts/NN-*.txt` (nếu xây qua nhiều giai đoạn), milestone 0.1.0, issue (hỏi người dùng, đồng ý thì tự gọi `/kessie-skills:proj plan`) | Backlog nằm trong issue tracker |
 
 Không bỏ cổng. Dự án nhỏ (CLI, thư viện, site tĩnh) được rút gọn theo `project-types.md`, nhưng tối thiểu vẫn phải có: idea brief + ADR stack + CLAUDE.md + CI, rồi mới viết code.
 
@@ -32,18 +32,19 @@ Không bỏ cổng. Dự án nhỏ (CLI, thư viện, site tĩnh) được rút 
 <skill-dir>/scripts/scaffold.sh <repo> --name "Tên dự án" --apply   # ghi, không ghi đè file đã có
 ```
 
-CLAUDE.md do scaffold tạo có sẵn mục "Quy trình với AI agent", liệt kê các chế độ của `/kessie-skills:proj`. Skill này **không tự kích hoạt**: agent chỉ gợi ý lệnh phù hợp để người dùng gọi.
+CLAUDE.md do scaffold tạo có sẵn mục "Quy trình với AI agent", ánh xạ loại yêu cầu sang chế độ của `/kessie-skills:proj`. Agent **tự gọi** skill theo bảng đó; người dùng không cần gõ lệnh.
 
 **Quy tắc bắt buộc trong CLAUDE.md** (giữ nguyên khi điền TODO, không lược bỏ; repo đã có CLAUDE.md thì bổ sung vào):
 1. Lưu prompt dựng dự án vào `prompts/LOG.md` (mục "Quy trình với AI agent"). Ngay khi scaffold xong, ghi mục đầu tiên trong `prompts/LOG.md`: yêu cầu kickoff và các quyết định của giai đoạn 0–2.
 2. Không ghi attribution của AI: không `Co-Authored-By` trong commit; không "Generated with Claude Code" trong issue, mô tả PR, bình luận PR (mục "Git và PR"). Áp dụng ngay từ commit đầu tiên của kickoff.
 3. Mục "Skill bổ trợ": bảng skill bổ trợ cho proj (hiện là `karpathy-guidelines`) kèm lệnh cài, và quy tắc "skill chưa cài thì agent gợi ý lệnh cài, không tự cài". Ngay trong kickoff, nếu skill trong bảng chưa có trong danh sách skill khả dụng thì gợi ý người dùng lệnh cài. Sau khi có ADR chọn stack, nếu stack có skill chính chủ (phụ lục của `docs/RECOMMENDED-SKILLS.md` trong repo [kessie-skills](https://github.com/antialberteinstein/kessie-skills/blob/main/docs/RECOMMENDED-SKILLS.md)), hỏi người dùng có muốn thêm vào bảng không.
+4. **Agent tự gọi skill:** mục "Quy trình với AI agent" ghi rõ agent tự gọi `proj` (Skill tool) theo chế độ khớp yêu cầu; mục "Skill bổ trợ" có cột "Khi nào gọi" cho từng skill và quy tắc "agent tự gọi skill khi tình huống khớp, không chờ người dùng gõ lệnh". Thêm skill nào vào bảng (gồm skill của stack ở trên) thì điền cột "Khi nào gọi" bằng tình huống cụ thể. CLAUDE.md có sẵn ghi "agent không tự gọi skill" hoặc "người dùng tự gõ lệnh" thì thay bằng quy tắc này. Từ đây trở đi trong kickoff, agent tự gọi skill bổ trợ khi khớp.
 
 ## Tiếp nhận dự án đang dở
 
 1. Chạy `<skill-dir>/scripts/project-snapshot.sh <repo>` để biết trạng thái thật.
 2. Xác định loại dự án (bước 0), rồi đối chiếu bảng trên: thiếu ADR, CLAUDE.md, CI, hay backlog đang nằm rải rác?
-3. **Bổ sung, không viết lại:** viết lại ADR từ lịch sử (ghi rõ "ghi lại hồi tố"), tạo CLAUDE.md từ code thật (kèm 3 quy tắc bắt buộc ở trên; CLAUDE.md đã có thì chỉ thêm 3 quy tắc đó), tạo `prompts/LOG.md` nếu chưa có, gom backlog về tracker. Trình danh sách lỗ hổng theo thứ tự ưu tiên để người dùng chọn.
+3. **Bổ sung, không viết lại:** viết lại ADR từ lịch sử (ghi rõ "ghi lại hồi tố"), tạo CLAUDE.md từ code thật (kèm 4 quy tắc bắt buộc ở trên; CLAUDE.md đã có thì chỉ thêm 4 quy tắc đó), tạo `prompts/LOG.md` nếu chưa có, gom backlog về tracker. Trình danh sách lỗ hổng theo thứ tự ưu tiên để người dùng chọn.
 
 ## 10 bài học (áp dụng từ ngày đầu)
 
@@ -62,4 +63,4 @@ CLAUDE.md do scaffold tạo có sẵn mục "Quy trình với AI agent", liệt 
 
 Chọn hoặc đổi stack và kiến trúc; tạo repo GitHub hay đổi visibility; push, mở PR, merge, gắn tag, publish; chạy lệnh lên môi trường thật; tạo hay đóng issue, milestone, label; xoá file hay nhánh; thêm dịch vụ trả phí.
 
-Dùng kèm: `karpathy-guidelines`; Plan mode cho việc lớn.
+Dùng kèm (agent tự gọi): `karpathy-guidelines`; Plan mode cho việc lớn.
