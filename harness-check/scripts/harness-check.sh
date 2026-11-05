@@ -14,6 +14,8 @@ ok()   { echo "OK    $1  $2"; }
 warn() { echo "WARN  $1  $2"; nw=$((nw+1)); }
 fail() { echo "FAIL  $1  $2"; nf=$((nf+1)); }
 have() { command -v "$1" >/dev/null 2>&1; }
+tmo() { local s="$1"; shift  # timeout không có sẵn trên macOS
+  if have timeout; then timeout "$s" "$@"; elif have gtimeout; then gtimeout "$s" "$@"; else "$@"; fi; }
 
 have jq || { echo "FAIL  tool  thiếu jq"; exit 1; }
 
@@ -49,26 +51,29 @@ if [[ -f "$INST" ]] && jq empty "$INST" 2>/dev/null; then
   done
 fi
 
-# case thay cho mảng kết hợp: /bin/bash trên macOS là bản 3.2, không có declare -A
-lspbin() {
+lspbin() { # bash 3.2 (macOS) không có mảng kết hợp
   case "$1" in
     typescript-lsp) echo typescript-language-server ;; pyright-lsp) echo pyright-langserver ;;
     clangd-lsp) echo clangd ;; rust-analyzer-lsp) echo rust-analyzer ;; gopls-lsp) echo gopls ;;
     csharp-lsp) echo csharp-ls ;; jdtls-lsp) echo jdtls ;; lua-lsp) echo lua-language-server ;;
     swift-lsp) echo sourcekit-lsp ;;
-  esac
-}
+  esac; }
 for k in $ENABLED; do
   b="$(lspbin "${k%@*}")"; [[ -n "$b" ]] || continue
   have "$b" && ok lsp "$k → $b có trong PATH" || fail lsp "$k bật nhưng thiếu '$b' trong PATH"
 done
 
 # ── 3. Skill và agent ───────────────────────────────────────────────
-# không dùng find -printf (chỉ GNU find có)
-list() { [[ -d "$1" ]] && find "$1" -mindepth 1 -maxdepth 1 \( -type d -o -type l -o -name '*.md' \) -exec basename {} \; | sed 's/\.md$//' | sort; }
+list() { # không dùng find -printf (GNU) để chạy được trên macOS
+  [[ -d "$1" ]] || return 0
+  local e; for e in "$1"/*; do
+    [[ -e "$e" || -L "$e" ]] || continue
+    [[ -d "$e" || "$e" == *.md ]] && basename "$e" .md
+  done | sort; }
 US_SK=$(list "$U/skills"); US_AG=$(list "$U/agents")
 PR_SK=$([[ -n "$P" ]] && list "$P/skills"); PR_AG=$([[ -n "$P" ]] && list "$P/agents")
-ok skill "user: $(wc -w <<<"$US_SK") skill, $(wc -w <<<"$US_AG") agent | project: $(wc -w <<<"$PR_SK") skill, $(wc -w <<<"$PR_AG") agent"
+cnt() { echo "$1" | sed "/^$/d" | wc -l | tr -d " "; }
+ok skill "user: $(cnt "$US_SK") skill, $(cnt "$US_AG") agent | project: $(cnt "$PR_SK") skill, $(cnt "$PR_AG") agent"
 
 for d in $(comm -12 <(echo "$US_SK") <(echo "$PR_SK")); do warn skill "'$d' có ở cả user và project"; done
 for d in $(comm -12 <(echo "$US_AG") <(echo "$PR_AG")); do warn agent "'$d' có ở cả user và project"; done
@@ -83,7 +88,7 @@ for x in $US_SK $PR_SK; do [[ "$x" == orch-* ]] && warn overlap "'$x' trùng vai
 LEFT=$(grep -rlE '^name: (add-language-rules|database-migration|feature-development|everything-claude-code-conventions)$' "$U" "$HOME/.agents" 2>/dev/null | grep -v '/plugins/cache/' || true)
 [[ -n "$LEFT" ]] && while read -r l; do warn leftover "skill ECC cũ còn sót: $l"; done <<<"$LEFT"
 for d in rules commands; do
-  [[ -d "$U/$d" ]] && [[ -n "$(ls -A "$U/$d" 2>/dev/null)" ]] && warn leftover "~/.claude/$d/ còn $(find "$U/$d" -type f | wc -l) file, có thể là ECC cũ"
+  [[ -d "$U/$d" ]] && [[ -n "$(ls -A "$U/$d" 2>/dev/null)" ]] && warn leftover "~/.claude/$d/ còn $(find "$U/$d" -type f | wc -l | tr -d " ") file, có thể là ECC cũ"
 done
 
 # Ước lượng token cho phần description luôn nằm trong context
@@ -123,15 +128,14 @@ for f in ${VALID[@]+"${VALID[@]}"}; do
 done
 
 # ── 6. Hook và ECC ──────────────────────────────────────────────────
-nh=$(jq '[.hooks // {} | .[] | .[]] | length' "$US")
+nh=$(jq '[.hooks // {} | .[] | .[]] | length' "$US" 2>/dev/null); nh=${nh:-0}
 ok hooks "$nh nhóm hook ở user"
 if [[ -f "$U/ecc/SOURCE" ]]; then
   sha=$(sed -n 's/^commit: //p' "$U/ecc/SOURCE")
   jq -e '.env.ECC_DISABLED_HOOKS' "$US" >/dev/null 2>&1 || warn ecc "có ECC nhưng chưa đặt ECC_DISABLED_HOOKS: hook tmux, GateGuard… đang bật"
   have node || fail ecc "hook ECC cần node nhưng không có node trong PATH"
   if (( OFFLINE == 0 )) && have git; then
-    to=""; have timeout && to="timeout 15"
-    latest=$($to git ls-remote https://github.com/affaan-m/ECC HEAD 2>/dev/null | cut -f1)
+    latest=$(tmo 15 git ls-remote https://github.com/affaan-m/ECC HEAD 2>/dev/null | cut -f1)
     if [[ -z "$latest" ]]; then warn ecc "không kiểm tra được bản ECC mới nhất (mạng?)"
     elif [[ "$latest" == "$sha" ]]; then ok ecc "ECC đang ở bản mới nhất (${sha:0:7})"
     else warn ecc "ECC ${sha:0:7} cũ hơn bản mới nhất ${latest:0:7}: chạy lại install-necessary-ecc-user.sh"; fi

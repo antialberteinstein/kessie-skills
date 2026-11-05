@@ -55,5 +55,19 @@ check "ecc remove chạy thử: không tạo .claude"         [ ! -e "$E/.claude
 out=$(cd "$E" && CLAUDE_CONFIG_DIR="$U" bash "$ECC" add 2>&1); rc=$?
 check "ecc add không tham số thì dừng"                 [ "$rc" -ne 0 ]
 
+# ── Skill: frontmatter hợp lệ, README đã đồng bộ ──
+for f in "$ROOT"/*/SKILL.md; do
+  d="$(basename "$(dirname "$f")")"
+  fm="$(awk 'NR==1&&/^---$/{f=1;next} f&&/^---$/{exit} f' "$f")"
+  check "$d: name khớp tên thư mục"                    grep -qx "name: $d" <<<"$fm"
+  check "$d: có description"                           grep -q "^description:" <<<"$fm"
+done
+check "README đã đồng bộ với các skill"                python3 "$ROOT/scripts/update-readme.py" --check
+for d in disk-cleanup run-python; do
+  check "README ghi $d là skill cá nhân"               grep -q "^| \`/$d\` | Skill cá nhân" "$ROOT/README.md"
+done
+
+check "run-python dùng ~/.zshrc, không phải ~/.zshr" bash -c "! grep -rqE '~/\\.zshr([^c]|\$)' \"$ROOT/run-python\""
+
 echo "---"; echo "$pass passed, $failn failed"
 [ "$failn" -eq 0 ]

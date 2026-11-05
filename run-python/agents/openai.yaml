@@ -1,0 +1,6 @@
+interface:
+  display_name: "Run Python"
+  short_description: "Activate the conda env when python/pip fail"
+  default_prompt: "Use $run-python to activate my conda environment."
+policy:
+  allow_implicit_invocation: true

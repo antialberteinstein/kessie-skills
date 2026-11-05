@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Sync Skills README](https://github.com/antialberteinstein/kessie-skills/actions/workflows/sync-skills-readme.yml/badge.svg)](https://github.com/antialberteinstein/kessie-skills/actions/workflows/sync-skills-readme.yml)
-<!-- SKILLS_COUNT_START -->![Skills Count](https://img.shields.io/badge/skills-6-blue.svg?style=flat-square)<!-- SKILLS_COUNT_END -->
+<!-- SKILLS_COUNT_START -->![Skills Count](https://img.shields.io/badge/skills-8-blue.svg?style=flat-square)<!-- SKILLS_COUNT_END -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](./LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](./CONTRIBUTING.md)
 
@@ -27,10 +27,12 @@
 | Skill | Trigger / Slash Command | Description |
 | :--- | :--- | :--- |
 | **[`add-preset`](./add-preset/SKILL.md)** | `/add-preset` | Thêm hoặc sửa một nhóm (preset) trong catalog của /setup-project, sau khi tra cứu thành phần thật trong ECC và marketplace chính thức |
+| **[`disk-cleanup`](./disk-cleanup/SKILL.md)** | `/disk-cleanup` | > |
 | **[`harness-check`](./harness-check/SKILL.md)** | `/harness-check` | Kiểm tra cấu hình Claude Code (user và project hiện tại), báo lỗi, chồng chéo và đề xuất cách sửa |
 | **[`issue-resolve`](./issue-resolve/SKILL.md)** | `/issue-resolve`, `/resolve-issue` | Resolve a GitHub issue end-to-end: fetch issue details, reproduce, implement fix, test, submit PR, and iterate on review feedback. |
 | **[`pr-review`](./pr-review/SKILL.md)** | `/pr-review`, `/pull-request-review` | Review or test a GitHub pull request. Inspects diffs, analyzes code quality, security, and test coverage, and provides actionable feedback. |
 | **[`proj`](./proj/SKILL.md)** | `/proj` | Quy trình dự án cho một người làm cùng AI agent, mọi loại dự án và stack — khởi động, spec (người dùng chốt), DESIGN.md, tạo issue, build issue → PR, kiểm chứng, phát hành, trạng thái và bảo trì. Dùng khi người dùng muốn bắt đầu hoặc tiếp nhận dự án, mô tả/thảo luận tính năng, chọn giao diện, tạo issue hay lên kế hoạch, làm một issue, kiểm chứng hay phát hành, hỏi trạng thái hoặc bước tiếp theo — kể cả khi không gõ lệnh, nhất là khi CLAUDE.md dự án trỏ tới proj. Tham số: từ đầu là chế độ (kickoff, spec, design, issue, plan, build, ship, status, report, triage, deps); trống thì gợi ý bước tiếp theo. |
+| **[`run-python`](./run-python/SKILL.md)** | `/run-python` | Fix Python/pip environment errors by activating conda environment. Use when python or pip commands fail with environment/module errors. Automatically sources ~/.zshrc if condaon is not found, then activates conda ai environment. |
 | **[`setup-project`](./setup-project/SKILL.md)** | `/setup-project` | Phân tích project hiện tại rồi đề xuất và cài plugin, skill, agent ở scope project |
 <!-- SKILLS_TABLE_END -->
 
@@ -208,6 +210,17 @@ Manual-only (`disable-model-invocation: true`) helpers for the Claude Code harne
 
 ---
 
+### Personal skills: `disk-cleanup`, `run-python`
+
+> **Đây là skill cá nhân của tôi (antialberteinstein)**, viết cho máy và môi trường riêng của tôi. Chúng được để trong repo cho tiện đồng bộ, không phải skill dùng chung. Nếu bạn cài plugin này, hãy đọc kỹ trước khi dùng hoặc bỏ qua chúng.
+
+| Command | Ghi chú |
+| :--- | :--- |
+| `/disk-cleanup` | Skill cá nhân. Dọn ổ đĩa macOS an toàn, luôn hỏi trước khi xóa. Viết cho macOS và các ổ `/Volumes/*` trên máy tôi. |
+| `/run-python` | Skill cá nhân. Khi `python`/`pip` lỗi môi trường thì kích hoạt conda env `ai` qua hàm shell `condaon` (nạp từ `~/.zshrc`). Chỉ chạy được nếu bạn có đúng hàm, file và env đó. |
+
+---
+
 ## Automated Skills Sync
 
 This repository includes a GitHub Action workflow ([`.github/workflows/sync-skills-readme.yml`](./.github/workflows/sync-skills-readme.yml)) that runs on every push or PR touching `*/SKILL.md`:
@@ -248,6 +261,8 @@ kessie-skills/
 ├── uninstall.sh                    # Clean uninstallation script
 ├── add-preset/
 │   └── SKILL.md                    # Add a preset to setup-project's catalog
+├── disk-cleanup/                   # (personal) macOS disk cleanup
+│   └── SKILL.md
 ├── harness-check/
 │   ├── SKILL.md                    # Harness audit report + guided fixes
 │   └── scripts/harness-check.sh    # Read-only checker (OK/WARN/FAIL)
@@ -255,6 +270,9 @@ kessie-skills/
 │   └── SKILL.md                    # Issue resolution workflow
 ├── pr-review/
 │   └── SKILL.md                    # PR review and testing workflow
+├── run-python/                     # (personal) Activate conda env on python/pip errors
+│   ├── SKILL.md
+│   └── scripts/activate-conda.sh
 └── proj/
     ├── SKILL.md                    # Mode router + shared principles
     ├── agents/openai.yaml          # Codex metadata
