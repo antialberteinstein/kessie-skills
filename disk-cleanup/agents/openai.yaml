@@ -1,0 +1,6 @@
+interface:
+  display_name: "Disk Cleanup"
+  short_description: "Safe, interactive macOS disk-space cleanup"
+  default_prompt: "Use $disk-cleanup to find what is using my disk space."
+policy:
+  allow_implicit_invocation: true

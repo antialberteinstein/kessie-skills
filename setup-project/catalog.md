@@ -9,7 +9,7 @@ tìm thấy dấu hiệu đó trong project, và nêu dấu hiệu đó trong b�
 |---|---|---|
 | `typescript-lsp` | `tsconfig.json`, `package.json` có `typescript` | `typescript-language-server` (`npm i -g typescript typescript-language-server`) |
 | `pyright-lsp` | `pyproject.toml`, `requirements*.txt`, `*.py` | `pyright` (`npm i -g pyright` hoặc `pipx install pyright`) |
-| `clangd-lsp` | `CMakeLists.txt`, `*.c`, `*.cpp`, `*.h`, `compile_commands.json` | `clangd` (macOS: có sẵn trong Xcode Command Line Tools hoặc `brew install llvm`; Fedora: `sudo dnf install clang-tools-extra`) |
+| `clangd-lsp` | `CMakeLists.txt`, `*.c`, `*.cpp`, `*.h`, `compile_commands.json` | `clangd` (macOS: `xcode-select --install` hoặc `brew install llvm` · Fedora: `sudo dnf install clang-tools-extra`) |
 | `rust-analyzer-lsp` | `Cargo.toml` | `rust-analyzer` |
 | `gopls-lsp` | `go.mod` | `gopls` |
 | `frontend-design` | project có UI web (React/Vue/Svelte, `index.html`, Tailwind) | — |
