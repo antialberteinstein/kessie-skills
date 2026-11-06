@@ -1,7 +1,8 @@
 # Catalog cho /setup-project
 
-Chỉ đề xuất những gì có trong file này. Mỗi mục có **dấu hiệu**: chỉ đề xuất khi
-tìm thấy dấu hiệu đó trong project, và nêu dấu hiệu đó trong bảng đề xuất.
+Bảng đề xuất chính (bước 4) chỉ lấy từ file này. Mỗi mục có **dấu hiệu**: chỉ đề xuất
+khi tìm thấy dấu hiệu đó trong project, và nêu dấu hiệu đó trong bảng đề xuất. Gợi ý
+tìm trên web (bước 4b) trình bày riêng và chỉ cài khi người dùng chọn đích danh.
 
 ## Plugin (marketplace `claude-plugins-official`, bật ở scope project)
 
@@ -90,4 +91,5 @@ Dấu hiệu: `Dockerfile`, `docker-compose*.yml`, `compose*.yml`.
   (dùng `gh`), Kaggle MCP bản cộng đồng (dùng CLI `kaggle`).
 - `tdd-workflow`, `verification-loop`, `planner`, `tdd-guide`, `code-reviewer`, `orch-*`
   (trùng Superpowers).
-- Bất cứ thứ gì ngoài catalog này. Nếu người dùng muốn thứ khác, hỏi trước.
+- Bất cứ thứ gì ngoài catalog này trong bảng đề xuất chính. Thứ khác chỉ xuất hiện ở
+  phần gợi ý tra cứu web (bước 4b), và chỉ cài khi người dùng chọn đích danh.
