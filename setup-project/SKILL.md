@@ -1,13 +1,13 @@
 ---
 name: setup-project
-description: Phân tích project hiện tại rồi đề xuất và cài plugin, skill, agent ở scope project
+description: Phân tích project hiện tại rồi đề xuất và cài plugin, skill, agent và MCP ở scope project
 disable-model-invocation: true
 ---
 
 # /setup-project
 
-Thiết lập Claude Code cho project trong thư mục hiện tại: chọn plugin, skill và agent
-phù hợp từ catalog, hỏi xác nhận, rồi cài vào `./.claude/`.
+Thiết lập Claude Code cho project trong thư mục hiện tại: chọn plugin, skill, agent và
+MCP phù hợp từ catalog, hỏi xác nhận, rồi cài vào `./.claude/` và `./.mcp.json`.
 
 Yêu cầu thêm của người dùng (có thể trống): $ARGUMENTS
 Ví dụ: `status`, `thêm ml`, `gỡ react`, `cập nhật`.
@@ -17,8 +17,9 @@ Ví dụ: `status`, `thêm ml`, `gỡ react`, `cập nhật`.
 - script ECC: `${CLAUDE_SKILL_DIR}/scripts/ecc-project.sh`
 
 ## Phạm vi được phép
-- Chỉ ghi trong `./.claude/` của project. Không sửa `~/.claude/`, `CLAUDE.md` gốc của
-  project hay bất kỳ file nào khác.
+- Chỉ ghi trong `./.claude/` và `./.mcp.json` của project. Không sửa `~/.claude/`,
+  `~/.claude.json`, `CLAUDE.md` gốc của project hay bất kỳ file nào khác.
+- Không ghi token hay key cố định vào `.mcp.json`.
 - Chỉ cài những gì có trong catalog.
 - Không chạy `sudo`. Thiếu công cụ hệ thống thì báo lệnh cài để người dùng tự chạy.
 
@@ -39,6 +40,7 @@ import khi không có file khai báo. Bỏ qua `node_modules/`, `.venv/`, `build
 - `bash <script ECC> status`
 - `claude plugin list` để biết plugin nào đã cài
 - `ls ~/.claude/skills ~/.claude/agents` để biết những gì đã có ở scope user
+- `./.mcp.json` (khối `mcpServers`) và `claude mcp list` để biết MCP nào đã có
 
 ### 4. Đề xuất và chờ xác nhận
 Trình bày **một bảng**, mỗi dòng một thay đổi:
@@ -47,6 +49,7 @@ Trình bày **một bảng**, mỗi dòng một thay đổi:
 |---|---|---|
 | + plugin | `pyright-lsp` | `pyproject.toml` |
 | + ECC | `pytorch-patterns`, `mle-reviewer` | `torch` trong `pyproject.toml` |
+| + MCP | `hf` | `transformers` trong `pyproject.toml` |
 | − ECC | `react-reviewer` | không còn `react` trong `package.json` |
 
 Sau bảng, liệt kê:
@@ -73,11 +76,21 @@ bash <script ECC> remove --skills x --agents y       # khi gỡ
 ```
 Với yêu cầu `cập nhật`: đọc `status`, rồi chạy `add` lại đúng danh sách đó.
 
+MCP, mỗi MCP một lệnh, đúng lệnh ghi trong catalog (lệnh này tạo hoặc cập nhật
+`./.mcp.json`):
+```bash
+claude mcp add --scope project <tên> ...    # thêm
+claude mcp remove --scope project <tên>     # gỡ
+```
+MCP đã có trong `./.mcp.json` thì bỏ qua, không thêm lại.
+
 Lệnh nào lỗi thì dừng, báo nguyên văn lỗi, không thử cách khác.
 
 ### 6. Kiểm tra và báo cáo
-- In lại `enabledPlugins` của `./.claude/settings.json` và kết quả `status`.
+- In lại `enabledPlugins` của `./.claude/settings.json`, kết quả `status`, và danh sách
+  `mcpServers` của `./.mcp.json`.
 - Báo ngắn gọn đã thêm, gỡ những gì.
-- Nhắc người dùng chạy `/reload-plugins` hoặc khởi động lại để nạp.
-- Nếu project có git và `.claude/` chưa nằm trong `.gitignore`, hỏi người dùng muốn
-  commit cấu hình này hay bỏ qua. Không tự sửa `.gitignore`.
+- Nhắc người dùng chạy `/reload-plugins` hoặc khởi động lại để nạp. Nếu có MCP mới,
+  nhắc rằng Claude Code sẽ hỏi duyệt MCP project ở lần khởi động tới.
+- Nếu project có git và `.claude/` hoặc `.mcp.json` chưa nằm trong `.gitignore`, hỏi
+  người dùng muốn commit cấu hình này hay bỏ qua. Không tự sửa `.gitignore`.

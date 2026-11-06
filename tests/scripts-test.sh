@@ -42,6 +42,31 @@ check "settings hỏng: exit 0"                          [ "$rc" -eq 0 ]
 check "settings hỏng: báo FAIL json"                   has "$out" "không phải JSON hợp lệ"
 check "settings hỏng: không unbound variable"          hasnt "$out" "unbound variable"
 
+# ── harness-check: MCP (user trong .claude.json, project trong .mcp.json) ──
+U3="$TMP/user3"; P3="$TMP/proj3"; mkdir -p "$U3" "$P3/.claude"
+echo '{ "enableAllProjectMcpServers": true }' > "$U3/settings.json"
+echo '{ "mcpServers": { "context7": { "type": "stdio", "command": "sh", "args": [] } } }' > "$U3/.claude.json"
+cat > "$P3/.mcp.json" <<'JSON'
+{ "mcpServers": {
+    "context7": { "command": "sh" },
+    "colab":    { "command": "lenh-khong-ton-tai-zzz", "args": [] },
+    "hf":       { "type": "http", "url": "https://huggingface.co/mcp", "headers": { "Authorization": "Bearer hf_s3cr3t" } },
+    "safe":     { "type": "http", "url": "https://x", "headers": { "Authorization": "Bearer ${HF_TOKEN}" } } } }
+JSON
+out=$(cd "$P3" && CLAUDE_CONFIG_DIR="$U3" bash "$HC" --offline 2>&1); rc=$?
+check "mcp: exit 0"                                    [ "$rc" -eq 0 ]
+check "mcp: liệt kê MCP user và project"               has "$out" "user: context7 | project:"
+check "mcp: báo MCP trùng user/project"                has "$out" "'context7' khai báo ở cả user và project"
+check "mcp: báo thiếu lệnh của MCP stdio"              has "$out" "MCP cần 'lenh-khong-ton-tai-zzz'"
+check "mcp: báo enableAllProjectMcpServers"            has "$out" "enableAllProjectMcpServers"
+check "mcp: báo token cố định trong .mcp.json"         has "$out" "MCP 'hf' có header 'Authorization'"
+check "mcp: không in giá trị token"                    hasnt "$out" "hf_s3cr3t"
+check "mcp: \${BIẾN} không bị coi là token cố định"     hasnt "$out" "MCP 'safe'"
+echo '{ hỏng' > "$P3/.mcp.json"
+out=$(cd "$P3" && CLAUDE_CONFIG_DIR="$U3" bash "$HC" --offline 2>&1)
+check "mcp: .mcp.json hỏng thì báo FAIL"               has "$out" ".mcp.json không phải JSON hợp lệ"
+check "mcp: .mcp.json hỏng không unbound variable"     hasnt "$out" "unbound variable"
+
 # ── ecc-project.sh: các nhánh không cần mạng ──
 E="$TMP/eccproj"; mkdir -p "$E"
 out=$(cd "$E" && CLAUDE_CONFIG_DIR="$U" bash "$ECC" status 2>&1)

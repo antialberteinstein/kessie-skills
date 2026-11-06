@@ -144,5 +144,51 @@ if [[ -f "$U/ecc/SOURCE" ]]; then
   fi
 fi
 
+# ── 7. MCP ──────────────────────────────────────────────────────────
+# Scope user nằm trong ~/.claude.json (không phải settings.json); scope project nằm trong ./.mcp.json
+CJ="${CLAUDE_CONFIG_DIR:+$CLAUDE_CONFIG_DIR/.claude.json}"; CJ="${CJ:-$HOME/.claude.json}"
+PMF=""; [[ -n "$P" ]] && PMF="$PWD/.mcp.json"
+MCP_FILES=()
+UM=""; PM=""
+if [[ -f "$CJ" ]] && jq empty "$CJ" 2>/dev/null; then
+  UM=$(jq -r '.mcpServers // {} | keys[]' "$CJ"); MCP_FILES+=("$CJ")
+fi
+if [[ -n "$PMF" && -f "$PMF" ]]; then
+  if jq empty "$PMF" 2>/dev/null; then PM=$(jq -r '.mcpServers // {} | keys[]' "$PMF"); MCP_FILES+=("$PMF")
+  else fail mcp "$PMF không phải JSON hợp lệ"; fi
+fi
+if [[ -n "$UM$PM" ]]; then
+  ok mcp "user: $(echo ${UM:-—} | tr ' ' ',') | project: $(echo ${PM:-—} | tr ' ' ',')"
+fi
+for d in $(comm -12 <(echo "$UM" | sort) <(echo "$PM" | sort)); do
+  warn mcp "'$d' khai báo ở cả user và project"
+done
+
+# MCP chạy bằng lệnh (stdio) cần lệnh đó có trong PATH
+for c in $(for f in ${MCP_FILES[@]+"${MCP_FILES[@]}"}; do jq -r '.mcpServers // {} | .[] | .command // empty' "$f"; done | sort -u); do
+  have "$c" && ok mcp "lệnh '$c' có trong PATH" || fail mcp "MCP cần '$c' nhưng không có trong PATH"
+done
+
+for f in ${VALID[@]+"${VALID[@]}"}; do
+  jq -e '.enableAllProjectMcpServers == true' "$f" >/dev/null 2>&1 \
+    && warn mcp "$f bật enableAllProjectMcpServers: MCP trong .mcp.json của repo lạ sẽ tự chạy"
+done
+
+# .mcp.json thường được commit: token phải là ${BIẾN}, không được là giá trị cố định
+if [[ -n "$PMF" && -f "$PMF" ]] && jq empty "$PMF" 2>/dev/null; then
+  while IFS=$'\t' read -r srv kind key; do
+    [[ -n "$srv" ]] || continue
+    fail secret "$PMF: MCP '$srv' có $kind '$key' chứa giá trị cố định (không in ra). Dùng \${BIẾN_MÔI_TRƯỜNG}."
+  done < <(jq -r '.mcpServers // {} | to_entries[] | .key as $n | .value as $v
+      | ( ($v.env // {} | to_entries[]
+           | select(.key | test("TOKEN|SECRET|PASSWORD|API_?KEY|PRIVATE"; "i"))
+           | select((.value | tostring | length) > 0 and ((.value | tostring) | test("\\$\\{") | not))
+           | [$n, "env", .key]),
+          ($v.headers // {} | to_entries[]
+           | select(.key | test("authorization|api[-_]?key|token"; "i"))
+           | select((.value | tostring) | test("\\$\\{") | not)
+           | [$n, "header", .key]) ) | @tsv' "$PMF")
+fi
+
 echo "---"
 echo "Tổng: $nf FAIL, $nw WARN"
