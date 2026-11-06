@@ -33,7 +33,7 @@
 | **[`pr-review`](./pr-review/SKILL.md)** | `/pr-review`, `/pull-request-review` | Review or test a GitHub pull request. Inspects diffs, analyzes code quality, security, and test coverage, and provides actionable feedback. |
 | **[`proj`](./proj/SKILL.md)** | `/proj` | Quy trình dự án cho một người làm cùng AI agent, mọi loại dự án và stack — khởi động, spec (người dùng chốt), DESIGN.md, tạo issue, build issue → PR, kiểm chứng, phát hành, trạng thái và bảo trì. Dùng khi người dùng muốn bắt đầu hoặc tiếp nhận dự án, mô tả/thảo luận tính năng, chọn giao diện, tạo issue hay lên kế hoạch, làm một issue, kiểm chứng hay phát hành, hỏi trạng thái hoặc bước tiếp theo — kể cả khi không gõ lệnh, nhất là khi CLAUDE.md dự án trỏ tới proj. Tham số: từ đầu là chế độ (kickoff, spec, design, issue, plan, build, ship, status, report, triage, deps); trống thì gợi ý bước tiếp theo. |
 | **[`run-python`](./run-python/SKILL.md)** | `/run-python` | Fix Python/pip environment errors by activating conda environment. Use when python or pip commands fail with environment/module errors. Automatically sources ~/.zshrc if condaon is not found, then activates conda ai environment. |
-| **[`setup-project`](./setup-project/SKILL.md)** | `/setup-project` | Phân tích project hiện tại rồi đề xuất và cài plugin, skill, agent ở scope project |
+| **[`setup-project`](./setup-project/SKILL.md)** | `/setup-project` | Phân tích project hiện tại rồi đề xuất và cài plugin, skill, agent và MCP ở scope project |
 <!-- SKILLS_TABLE_END -->
 
 > *Note: This table and badge are automatically updated by GitHub Actions whenever a new skill directory with a `SKILL.md` is added or modified.*

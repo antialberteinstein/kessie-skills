@@ -21,6 +21,23 @@ trừ khi người dùng yêu cầu.
 Kiểm tra binary bằng `command -v`. Nếu thiếu: vẫn có thể bật plugin, nhưng phải báo
 lệnh cài cho người dùng tự chạy. Không tự chạy `sudo`.
 
+## MCP (scope project, ghi vào `./.mcp.json`)
+
+| MCP | Dấu hiệu | Lệnh thêm | Cần có trên máy |
+|---|---|---|---|
+| `hf` (Hugging Face Hub) | `transformers`, `datasets`, `huggingface_hub`, `unsloth`, `peft`, `trl` trong dependency | `claude mcp add --scope project --transport http hf https://huggingface.co/mcp` | — |
+| `colab` (Google Colab) | `*.ipynb` có code huấn luyện, hoặc người dùng nói đang dùng Colab | `claude mcp add --scope project colab -- uvx git+https://github.com/googlecolab/colab-mcp` | `uvx` (cài `uv`) |
+| `playwright` | project có UI web (như `frontend-design`), hoặc `playwright` trong dependency | `claude mcp add --scope project playwright -- npx @playwright/mcp@latest` | `npx` (Node) |
+
+- `hf` không cần token cho bộ tool cơ bản. Muốn dùng tool cần đăng nhập thì thay URL bằng
+  `https://huggingface.co/mcp?login`. Không bao giờ ghi token cố định vào `.mcp.json`.
+- `colab` điều khiển notebook đang mở trên trình duyệt, chạy code bằng tài khoản Google
+  của người dùng. Nêu rõ điều này trong bảng đề xuất. `uvx git+…` lấy bản mới nhất mỗi
+  lần chạy; người dùng muốn cố định thì thêm `@<commit>` vào cuối URL.
+- `context7` thuộc scope user (do `setup.sh` của harness cài). Không thêm ở scope project.
+- `.mcp.json` thường được commit cùng repo. Claude Code sẽ hỏi người dùng trước khi bật
+  MCP project lần đầu; không đặt `enableAllProjectMcpServers`.
+
 ## Thành phần ECC (cài bằng `scripts/ecc-project.sh`)
 
 Script tự bỏ qua thứ đã có ở scope user (`~/.claude/skills`, `~/.claude/agents`).
@@ -69,6 +86,8 @@ Dấu hiệu: `Dockerfile`, `docker-compose*.yml`, `compose*.yml`.
 
 ## Không bao giờ đề xuất
 - Plugin `ecc@ecc`, profile của trình cài ECC, rule `common`.
+- MCP filesystem, fetch, memory, sequential-thinking (Claude Code đã có sẵn), GitHub MCP
+  (dùng `gh`), Kaggle MCP bản cộng đồng (dùng CLI `kaggle`).
 - `tdd-workflow`, `verification-loop`, `planner`, `tdd-guide`, `code-reviewer`, `orch-*`
   (trùng Superpowers).
 - Bất cứ thứ gì ngoài catalog này. Nếu người dùng muốn thứ khác, hỏi trước.

@@ -47,7 +47,7 @@ thích cho từng thành phần được chọn và những thành phần đã c
 Dừng lại chờ người dùng đồng ý hoặc chỉnh.
 
 ## 5. Ghi và kiểm tra
-- Chèn nhóm vào phần "Thành phần ECC" (hoặc bảng plugin) của `catalog.md`.
+- Chèn nhóm vào phần "Thành phần ECC" (hoặc bảng plugin, bảng MCP) của `catalog.md`.
 - Kiểm tra lại mọi tên vừa ghi đều tồn tại trong bản clone ECC hoặc marketplace.
 - Chạy `claude plugin validate "$KESSIE_REPO"`.
 - Hiện `git diff`, hỏi người dùng có muốn commit không. Nếu có, commit với message

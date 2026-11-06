@@ -1,6 +1,6 @@
 {
   "name": "kessie-skills",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Skill cá nhân của Kessie: issue-resolve, pr-review, setup-project, add-preset, harness-check, /kessie-skills:proj — quy trình dự án agent tự gọi theo yêu cầu (kickoff, spec, design, issue, plan, build, ship, status, report, triage, deps) cho mọi loại dự án và stack — và hai skill cá nhân disk-cleanup, run-python.",
   "author": { "name": "antialberteinstein" },
   "license": "MIT",
