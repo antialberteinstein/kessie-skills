@@ -94,5 +94,11 @@ done
 
 check "run-python dùng ~/.zshrc, không phải ~/.zshr" bash -c "! grep -rqE '~/\\.zshr([^c]|\$)' \"$ROOT/run-python\""
 
+# ── Antigravity (agy): plugin chỉ tự đọc skills/, skills.json trỏ nó vào thư mục gốc (quét một cấp) ──
+check "skills.json là JSON hợp lệ, trỏ vào thư mục gốc" \
+  jq -e '.entries == [{"path": "."}]' "$ROOT/skills.json"
+check "mọi skill nằm đúng một cấp dưới thư mục gốc" \
+  bash -c "! find \"$ROOT\" -mindepth 3 -name SKILL.md -not -path '*/.git/*' | grep -q ."
+
 echo "---"; echo "$pass passed, $failn failed"
 [ "$failn" -eq 0 ]
