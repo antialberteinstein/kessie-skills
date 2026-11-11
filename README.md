@@ -54,7 +54,7 @@ Ensure you have the following installed and authenticated:
 
 ## Installation & Deployment
 
-There are two ways to install. **Pick one** — installing both gives you duplicate skills (e.g. `/proj` and `/kessie-skills:proj`).
+There are three ways to install. **Pick one** — installing more than one gives you duplicate skills (e.g. `/proj` and `/kessie-skills:proj`).
 
 ### Option A — Claude Code plugin (recommended for Claude Code)
 
@@ -73,6 +73,19 @@ claude plugin list                    # kessie-skills@kessie · ✔ enabled
 ```
 
 Skills are namespaced: `/kessie-skills:proj`, `/kessie-skills:issue-resolve`, `/kessie-skills:pr-review`. Edits take effect next session or after `/reload-plugins`. Remove with `claude plugin marketplace remove kessie`.
+
+### Option C — Antigravity plugin (`agy`, IDE, app)
+
+Antigravity installs plugins straight from git. [`skills.json`](./skills.json) points it at the skill folders in the repo root (Antigravity only reads `skills/` by itself):
+
+```bash
+agy plugin install https://github.com/antialberteinstein/kessie-skills
+agy plugin list                       # kessie-skills · 5 skills
+```
+
+The plugin goes to `~/.gemini/config/plugins/kessie-skills/` and is shared by the `agy` CLI, the Antigravity IDE and the app. Re-run the install command to update. Pick this or `install.sh gemini`, not both.
+
+Skills are not namespaced (`/proj`, `/issue-resolve`). `harness-check`, `setup-project` and `add-preset` edit Claude Code's config, so `skills.json` leaves them out. `proj` reads [`proj/references/antigravity.md`](./proj/references/antigravity.md) to map Claude Code terms (`${CLAUDE_SKILL_DIR}`, Plan mode, `CLAUDE.md`) to Antigravity, and adds a one-line `GEMINI.md` (`@[CLAUDE.md](CLAUDE.md)`) so agy loads the project's CLAUDE.md.
 
 ### Option B — `install.sh` (Claude Code, Codex, Gemini CLI / Antigravity)
 
@@ -258,6 +271,7 @@ kessie-skills/
 ├── LICENSE                         # MIT License
 ├── README.md                       # Project documentation
 ├── install.sh                      # Multi-harness deployment script
+├── skills.json                     # Tells Antigravity to load skills from the repo root
 ├── uninstall.sh                    # Clean uninstallation script
 ├── add-preset/
 │   └── SKILL.md                    # Add a preset to setup-project's catalog
