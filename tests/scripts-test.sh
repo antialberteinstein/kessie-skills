@@ -105,6 +105,9 @@ check "exclude chỉ chứa skill có thật" \
   bash -c "for d in \$(jq -r '.entries[0].exclude[]' \"$ROOT/skills.json\"); do [ -f \"$ROOT/\$d/SKILL.md\" ] || exit 1; done"
 check "proj trỏ tới bảng đổi sang Antigravity"        grep -qF 'references/antigravity.md' "$ROOT/proj/SKILL.md"
 check "có references/antigravity.md"                  [ -f "$ROOT/proj/references/antigravity.md" ]
+check "proj ghi đường dẫn tuyệt đối cho agy (slash không kèm đường dẫn)" \
+  grep -qF '~/.gemini/config/plugins/kessie-skills/proj/references/antigravity.md' "$ROOT/proj/SKILL.md"
+check "antigravity.md dặn chạy script ngoài sandbox"   grep -qi 'sandbox' "$ROOT/proj/references/antigravity.md"
 check "mọi skill nằm đúng một cấp dưới thư mục gốc" \
   bash -c "! find \"$ROOT\" -mindepth 3 -name SKILL.md -not -path '*/.git/*' | grep -q ."
 
