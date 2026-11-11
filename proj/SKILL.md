@@ -9,6 +9,8 @@ allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/project-snapshot.sh *) Bash(${CL
 
 Đầu vào: `$ARGUMENTS`. **Từ đầu tiên là chế độ, phần còn lại là tham số của chế độ.**
 
+**Đang chạy trên Antigravity (agy, IDE, app)?** Đọc `references/antigravity.md` trước: nó đổi các khái niệm Claude Code trong skill này (biến, tên lệnh, CLAUDE.md, Plan mode) sang Antigravity.
+
 Thư mục skill: `${CLAUDE_SKILL_DIR}`. Trong các file `references/`, `<skill-dir>` nghĩa là thư mục này. Đường dẫn `references/…`, `scripts/…`, `templates/…` đều tính từ thư mục này.
 
 Tên lệnh phụ thuộc cách cài: `/kessie-skills:proj` khi cài dạng plugin, `/proj` khi cài bằng `install.sh`. Các file `references/` viết `/kessie-skills:proj`; khi gợi ý lệnh cho người dùng, dùng đúng tên đang được gọi.

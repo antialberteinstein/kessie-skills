@@ -80,10 +80,12 @@ Antigravity installs plugins straight from git. [`skills.json`](./skills.json) p
 
 ```bash
 agy plugin install https://github.com/antialberteinstein/kessie-skills
-agy plugin list                       # kessie-skills · 8 skills
+agy plugin list                       # kessie-skills · 5 skills
 ```
 
 The plugin goes to `~/.gemini/config/plugins/kessie-skills/` and is shared by the `agy` CLI, the Antigravity IDE and the app. Re-run the install command to update. Pick this or `install.sh gemini`, not both.
+
+Skills are not namespaced (`/proj`, `/issue-resolve`). `harness-check`, `setup-project` and `add-preset` edit Claude Code's config, so `skills.json` leaves them out. `proj` reads [`proj/references/antigravity.md`](./proj/references/antigravity.md) to map Claude Code terms (`${CLAUDE_SKILL_DIR}`, Plan mode, `CLAUDE.md`) to Antigravity, and adds a one-line `GEMINI.md` (`@[CLAUDE.md](CLAUDE.md)`) so agy loads the project's CLAUDE.md.
 
 ### Option B — `install.sh` (Claude Code, Codex, Gemini CLI / Antigravity)
 

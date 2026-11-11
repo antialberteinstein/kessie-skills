@@ -96,7 +96,15 @@ check "run-python dùng ~/.zshrc, không phải ~/.zshr" bash -c "! grep -rqE '~
 
 # ── Antigravity (agy): plugin chỉ tự đọc skills/, skills.json trỏ nó vào thư mục gốc (quét một cấp) ──
 check "skills.json là JSON hợp lệ, trỏ vào thư mục gốc" \
-  jq -e '.entries == [{"path": "."}]' "$ROOT/skills.json"
+  jq -e '.entries[0].path == "."' "$ROOT/skills.json"
+# Skill chỉ dành cho Claude Code (sửa ~/.claude, ./.claude) không nạp vào Antigravity
+for d in harness-check setup-project add-preset; do
+  check "Antigravity bỏ qua $d (chỉ cho Claude Code)"  jq -e --arg d "$d" '.entries[0].exclude | index($d)' "$ROOT/skills.json"
+done
+check "exclude chỉ chứa skill có thật" \
+  bash -c "for d in \$(jq -r '.entries[0].exclude[]' \"$ROOT/skills.json\"); do [ -f \"$ROOT/\$d/SKILL.md\" ] || exit 1; done"
+check "proj trỏ tới bảng đổi sang Antigravity"        grep -qF 'references/antigravity.md' "$ROOT/proj/SKILL.md"
+check "có references/antigravity.md"                  [ -f "$ROOT/proj/references/antigravity.md" ]
 check "mọi skill nằm đúng một cấp dưới thư mục gốc" \
   bash -c "! find \"$ROOT\" -mindepth 3 -name SKILL.md -not -path '*/.git/*' | grep -q ."
 
