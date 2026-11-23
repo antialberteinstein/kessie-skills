@@ -1,0 +1,6 @@
+interface:
+  display_name: "agy Delegate"
+  short_description: "Orchestrate the Antigravity CLI (agy) as an implementer sub-agent"
+  default_prompt: "Use $agy-delegate to plan this work and delegate the implementation to agy."
+policy:
+  allow_implicit_invocation: true
