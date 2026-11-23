@@ -2,7 +2,7 @@
   "entries": [
     {
       "path": ".",
-      "exclude": ["harness-check", "setup-project", "add-preset"]
+      "exclude": ["harness-check", "setup-project", "add-preset", "agy-delegate"]
     }
   ]
 }

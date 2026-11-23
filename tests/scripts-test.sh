@@ -98,7 +98,7 @@ check "run-python dùng ~/.zshrc, không phải ~/.zshr" bash -c "! grep -rqE '~
 check "skills.json là JSON hợp lệ, trỏ vào thư mục gốc" \
   jq -e '.entries[0].path == "."' "$ROOT/skills.json"
 # Skill chỉ dành cho Claude Code (sửa ~/.claude, ./.claude) không nạp vào Antigravity
-for d in harness-check setup-project add-preset; do
+for d in harness-check setup-project add-preset agy-delegate; do
   check "Antigravity bỏ qua $d (chỉ cho Claude Code)"  jq -e --arg d "$d" '.entries[0].exclude | index($d)' "$ROOT/skills.json"
 done
 check "exclude chỉ chứa skill có thật" \

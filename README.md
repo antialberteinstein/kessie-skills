@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Sync Skills README](https://github.com/antialberteinstein/kessie-skills/actions/workflows/sync-skills-readme.yml/badge.svg)](https://github.com/antialberteinstein/kessie-skills/actions/workflows/sync-skills-readme.yml)
-<!-- SKILLS_COUNT_START -->![Skills Count](https://img.shields.io/badge/skills-8-blue.svg?style=flat-square)<!-- SKILLS_COUNT_END -->
+<!-- SKILLS_COUNT_START -->![Skills Count](https://img.shields.io/badge/skills-9-blue.svg?style=flat-square)<!-- SKILLS_COUNT_END -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](./LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](./CONTRIBUTING.md)
 
@@ -27,6 +27,7 @@
 | Skill | Trigger / Slash Command | Description |
 | :--- | :--- | :--- |
 | **[`add-preset`](./add-preset/SKILL.md)** | `/add-preset` | Thêm hoặc sửa một nhóm (preset) trong catalog của /setup-project, sau khi tra cứu thành phần thật trong ECC và marketplace chính thức |
+| **[`agy-delegate`](./agy-delegate/SKILL.md)** | `/agy-delegate` | Orchestrate the Antigravity CLI (agy) as a sub-agent. Claude plans, defines acceptance tests and benchmarks up front, and makes the final call; agy implements each task via `agy -p` and handoff documents in .handoff/. Use this skill whenever the user mentions agy, Antigravity, "delegate to agy", "let agy do it", wants Claude to work alongside Gemini/Antigravity, wants to split work between two agents, or wants another agent to implement or review code — even if they never say "skill". Also use it when the project already has a .handoff/ folder or a CLAUDE.md with an agy-delegate section. |
 | **[`disk-cleanup`](./disk-cleanup/SKILL.md)** | `/disk-cleanup` | > |
 | **[`harness-check`](./harness-check/SKILL.md)** | `/harness-check` | Kiểm tra cấu hình Claude Code (user và project hiện tại), báo lỗi, chồng chéo và đề xuất cách sửa |
 | **[`issue-resolve`](./issue-resolve/SKILL.md)** | `/issue-resolve`, `/resolve-issue` | Resolve a GitHub issue end-to-end: fetch issue details, reproduce, implement fix, test, submit PR, and iterate on review feedback. |
@@ -85,7 +86,7 @@ agy plugin list                       # kessie-skills · 5 skills
 
 The plugin goes to `~/.gemini/config/plugins/kessie-skills/` and is shared by the `agy` CLI, the Antigravity IDE and the app. Re-run the install command to update. Pick this or `install.sh gemini`, not both.
 
-Skills are not namespaced (`/proj`, `/issue-resolve`). `harness-check`, `setup-project` and `add-preset` edit Claude Code's config, so `skills.json` leaves them out. `proj` reads [`proj/references/antigravity.md`](./proj/references/antigravity.md) to map Claude Code terms (`${CLAUDE_SKILL_DIR}`, Plan mode, `CLAUDE.md`) to Antigravity, and adds a one-line `GEMINI.md` (`@[CLAUDE.md](CLAUDE.md)`) so agy loads the project's CLAUDE.md.
+Skills are not namespaced (`/proj`, `/issue-resolve`). `harness-check`, `setup-project` and `add-preset` edit Claude Code's config, and `agy-delegate` is for Claude to call agy, so `skills.json` leaves them out. `proj` reads [`proj/references/antigravity.md`](./proj/references/antigravity.md) to map Claude Code terms (`${CLAUDE_SKILL_DIR}`, Plan mode, `CLAUDE.md`) to Antigravity, and adds a one-line `GEMINI.md` (`@[CLAUDE.md](CLAUDE.md)`) so agy loads the project's CLAUDE.md.
 
 ### Option B — `install.sh` (Claude Code, Codex, Gemini CLI / Antigravity)
 
@@ -223,6 +224,18 @@ Manual-only (`disable-model-invocation: true`) helpers for the Claude Code harne
 
 ---
 
+### Using `agy-delegate`
+
+Lets Claude orchestrate the [Antigravity CLI](https://antigravity.google) (`agy`) as an implementer sub-agent. The agent invokes it on its own whenever you mention agy/Antigravity, ask to split work between two agents, or the project already has a `.handoff/` folder.
+
+- **Claude** plans the work, writes the acceptance tests and benchmark baselines *before* delegating, locks the tests by `git hash-object`, verifies the result, and decides whether to keep or revert it.
+- **agy** implements one well-scoped task per `agy -p` call and writes a report.
+- State lives in `.handoff/` (`PLAN.md`, `acceptance/`, `baselines/`, `prompts/`, `reports/`, `reviews/`), so either agent can resume from a fresh session.
+
+Requires `agy` installed and signed in. The skill detects a missing install or sign-in from its first real call instead of checking beforehand.
+
+---
+
 ### Personal skills: `disk-cleanup`, `run-python`
 
 > **Đây là skill cá nhân của tôi (antialberteinstein)**, viết cho máy và môi trường riêng của tôi. Chúng được để trong repo cho tiện đồng bộ, không phải skill dùng chung. Nếu bạn cài plugin này, hãy đọc kỹ trước khi dùng hoặc bỏ qua chúng.
@@ -275,6 +288,8 @@ kessie-skills/
 ├── uninstall.sh                    # Clean uninstallation script
 ├── add-preset/
 │   └── SKILL.md                    # Add a preset to setup-project's catalog
+├── agy-delegate/
+│   └── SKILL.md                    # Orchestrate agy (Antigravity CLI) as implementer
 ├── disk-cleanup/                   # (personal) macOS disk cleanup
 │   └── SKILL.md
 ├── harness-check/
